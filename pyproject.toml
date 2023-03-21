@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "diploma-project-pd12"
+version = "0.1.0"
+description = "todolist for SkyPro diploma project"
+authors = ["Stanislav Meshcheriakov"]
+readme = "README.md"
+packages = [{include = "diploma_project_pd12"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4.1.7"
+python-dotenv = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
