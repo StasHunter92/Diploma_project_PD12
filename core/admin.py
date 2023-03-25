@@ -1,8 +1,17 @@
 from django.contrib import admin
-
-# Register your models here.
 from django.contrib.auth.admin import UserAdmin
 
 from core.models import User
 
-admin.site.register(User, UserAdmin)
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Create models
+class CustomAdmin(UserAdmin):
+    """Custom settings for admin panel"""
+    exclude: tuple[str] = ('password',)
+    readonly_fields: tuple[str] = ('date_joined', 'last_login')
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Register models
+admin.site.register(User, CustomAdmin)
