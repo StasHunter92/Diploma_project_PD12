@@ -26,3 +26,43 @@ ______________________________________
 **Используемый стек**
 - Python 3.10
 - Django 4.1.7
+- Postgres SQL
+______________________________________
+**Подготовка приложения**
+
+***В зависимости от выбранной ОС, команды могут различаться, ниже приведен пример для Windows***
+
+1) Создание виртуального окружения
+``` python
+python -m venv yourvenvname
+source /yourvenvname/scripts/activate.ps1
+```
+
+2) Установка менеджера пакетов Poetry
+``` python
+pip install poetry
+poetry init
+```
+
+3) Установка зависимостей ***(пример с использованием Poetry)***
+``` python
+poetry install
+```
+
+4) Создание `.env` файла с необходимыми значениями переменных:
+- SECRET_KEY
+- DATABASE_URL в формате psql://user:password@ip:port/database_name
+
+5) Создание и применение миграции для базы данных
+``` python
+python manage.py makemigrations
+python manage.py migrate
+```
+
+6) Запуск сервера
+``` python
+python manage.py runserver
+```
+
+______________________________________
+**Данный файл будет дополняться в ходе написания приложения**
