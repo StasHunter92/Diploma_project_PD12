@@ -1,5 +1,5 @@
 """
-ASGI config for Diploma_project_PD12 project.
+ASGI config for diploma_project_pd12 project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -13,7 +13,7 @@ from django.core.asgi import get_asgi_application
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Set the DJANGO_SETTINGS_MODULE environment variable to the project's settings module
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Diploma_project_PD12.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'diploma_project_pd12.settings')
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Create an ASGI application object using the project's settings module
