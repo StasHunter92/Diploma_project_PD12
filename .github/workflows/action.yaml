@@ -41,6 +41,7 @@ jobs:
         run: |
           mkdir todolist
           cat docker-compose-ci.yaml | envsubst > todolist/docker-compose.yaml
+          cat .env | envsubst > deploy/.env
       - name: copy compose file to server
         uses: appleboy/scp-action@master
         with:
@@ -56,8 +57,8 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PASSWORD }}
-          source: ".env"
-          target: "diploma_project/"
+          source: "todolist/.env"
+          target: "diploma_project"
           strip_components: 1
 
   run_server:
