@@ -47,7 +47,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PASSWORD }}
-          source: "todolist/docker-compose.yaml"
+          source: "todolist/docker-compose.yaml", '.env'
           target: "diploma_project"
           strip_components: 1
 
@@ -62,5 +62,5 @@ jobs:
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PASSWORD }}
           script: |
-            cd diploma project
+            cd diploma_project
             echo ${{ secrets.HOST_PASSWORD }} | sudo -S docker-compose up -d
