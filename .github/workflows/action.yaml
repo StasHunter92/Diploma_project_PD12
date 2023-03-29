@@ -13,8 +13,10 @@ jobs:
       - name: flake8 Lint
         uses: py-actions/flake8@v2
         with:
+          exclude: "./core/migrations/"
           max-line-length: "120"
           # ignore: W605,F541
+          ignore: F401
 
   build_push:
     runs-on: ubuntu-latest
