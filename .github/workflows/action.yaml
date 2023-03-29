@@ -51,14 +51,14 @@ jobs:
           target: "diploma_project"
           strip_components: 1
       - name: copy env file to server
-          uses: appleboy/scp-action@master
-          with:
-            host: ${{ secrets.HOST }}
-            username: ${{ secrets.HOST_USERNAME }}
-            password: ${{ secrets.HOST_PASSWORD }}
-            source: ".env"
-            target: "diploma_project/"
-            strip_components: 1
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          password: ${{ secrets.HOST_PASSWORD }}
+          source: ".env"
+          target: "diploma_project/"
+          strip_components: 1
 
   run_server:
     runs-on: ubuntu-latest
