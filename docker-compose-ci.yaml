@@ -5,8 +5,8 @@ services:
     image: postgres
     environment:
       POSTGRES_USER: todolistuser
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_PASSWORD: "${{ secrets.POSTGRES_PASSWORD }}"
+      POSTGRES_DB: "${{ secrets.POSTGRES_DB }}"
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "todolistuser"]
       interval: 2s
