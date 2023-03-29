@@ -21,8 +21,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    env_file:
-      - .env
+#    env_file:
+#      - .env
+    volumes:
+      - ./.env:/todolist/.env
 
   api:
     build: stashunter/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
@@ -31,8 +33,10 @@ services:
 #      - "8000:8000"
     depends_on:
       - migrate
-    env_file:
-      - .env
+#    env_file:
+#      - .env
+    volumes:
+      - ./.env:/todolist/.env
 
   frontend:
     image: sermalenk/skypro-front:lesson-34
