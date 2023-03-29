@@ -27,7 +27,7 @@ services:
       - ./.env:/todolist/.env
 
   api:
-    build: stashunter/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: stashunter/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     command: python manage.py runserver 0.0.0.0:8000
 #    ports:
 #      - "8000:8000"
