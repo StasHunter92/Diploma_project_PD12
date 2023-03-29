@@ -5,10 +5,10 @@ services:
     image: postgres
     environment:
       POSTGRES_USER: todolistuser
-      POSTGRES_PASSWORD: todolistpassword
-      POSTGRES_DB: todolist_postgres
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "todolistuser", "-d", "todolist_postgres", "-h", "localhost" ]
+      test: [ "CMD", "pg_isready", "-U", "todolistuser"]
       interval: 2s
       timeout: 2s
       retries: 3
