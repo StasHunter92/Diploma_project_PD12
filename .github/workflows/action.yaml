@@ -47,7 +47,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PASSWORD }}
-          source: "todolist/docker-compose.yaml", '.env'
+          source: "todolist/docker-compose.yaml, todolist/.env"
           target: "diploma_project"
           strip_components: 1
 
