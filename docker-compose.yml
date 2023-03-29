@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: todolistuser
+      POSTGRES_PASSWORD: todolistpassword
+      POSTGRES_DB: todolist_postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "todolistuser", "-d", "todolist_postgres", "-h", "localhost" ]
+      interval: 2s
+      timeout: 2s
+      retries: 3
+
+  migrate:
+    build: .
+    command: >
+      sh -c "python manage.py migrate"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  api:
+    build: .
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/todolist
+#    ports:
+#      - "8000:8000"
+    depends_on:
+      - migrate
+    env_file:
+      - .env
+
+  frontend:
+    image: sermalenk/skypro-front:lesson-34
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
