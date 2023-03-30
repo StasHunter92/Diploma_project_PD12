@@ -64,13 +64,6 @@ jobs:
           mkdir todolist
           cat docker-compose-ci.yaml | envsubst > todolist/docker-compose.yaml
           cat .env.deploy | envsubst > todolist/.env
-      #      - name: export secrets
-      #        env:
-      #          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      #          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-      #        run: |
-      #          export POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
-      #          export POSTGRES_DB="${POSTGRES_DB}"
 
       - name: Copy compose file to server
         uses: appleboy/scp-action@master

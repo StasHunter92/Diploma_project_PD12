@@ -8,10 +8,10 @@ services:
       POSTGRES_PASSWORD: todolistpassword
       POSTGRES_DB: todolist_postgres
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "todolistuser"]
+      test: [ "CMD", "pg_isready", "-U", "todolistuser", "-d", "todolist_postgres"]
       interval: 2s
       timeout: 2s
-      retries: 3
+      retries: 5
 
   migrate:
     build: .
@@ -35,7 +35,7 @@ services:
       - .env
 
   frontend:
-    image: sermalenk/skypro-front:lesson-34
+    image: sermalenk/skypro-front:lesson-38
     ports:
       - "80:80"
     depends_on:
