@@ -43,6 +43,6 @@ services:
   frontend:
     image: sermalenk/skypro-front:lesson-34
     ports:
-      - "8080:80"
+      - "80:8080"
     depends_on:
       - api
