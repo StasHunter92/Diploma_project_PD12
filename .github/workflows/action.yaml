@@ -24,15 +24,27 @@ jobs:
     steps:
       - name: clone code
         uses: actions/checkout@v2
+
       - name: docker build
-        #        env:
-        #          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        #          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        run: docker build -t stashunter/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: docker build -t stashunter/todolist:${GITHUB_REF_NAME}-${GITHUB_RUN_ID} .
+
       - name: docker login
-        run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        uses: docker/login-action@v1
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_TOKEN }}
+        # run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
       - name: docker push
-        run: docker push stashunter/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: docker push stashunter/todolist:${GITHUB_REF_NAME}-${GITHUB_RUN_ID}
 
   deploy:
     runs-on: ubuntu-latest
@@ -44,18 +56,20 @@ jobs:
     steps:
       - name: clone code
         uses: actions/checkout@v2
+
       - name: render configs
         run: |
           mkdir todolist
           cat docker-compose-ci.yaml | envsubst > todolist/docker-compose.yaml
           cat .env.deploy | envsubst > todolist/.env
-#      - name: export secrets
-#        env:
-#          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-#          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-#        run: |
-#          export POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
-#          export POSTGRES_DB="${POSTGRES_DB}"
+      #      - name: export secrets
+      #        env:
+      #          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      #          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      #        run: |
+      #          export POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
+      #          export POSTGRES_DB="${POSTGRES_DB}"
+
       - name: copy compose file to server
         uses: appleboy/scp-action@master
         with:
@@ -65,6 +79,7 @@ jobs:
           source: "todolist/docker-compose.yaml"
           target: "diploma_project"
           strip_components: 1
+
       - name: copy env file to server
         uses: appleboy/scp-action@master
         with:
@@ -74,6 +89,10 @@ jobs:
           source: "todolist/.env"
           target: "diploma_project"
           strip_components: 1
+
+      - name: delete temporary directory
+        run: |
+          rm -rf todolist
 
   run_server:
     runs-on: ubuntu-latest

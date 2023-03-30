@@ -8,15 +8,14 @@ services:
       POSTGRES_PASSWORD: todolistpassword
       POSTGRES_DB: todolist_postgres
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "todolistuser", "-d", "todolist_postgres", "-h", "localhost" ]
+      test: [ "CMD", "pg_isready", "-U", "todolistuser"]
       interval: 2s
       timeout: 2s
       retries: 3
 
   migrate:
     build: .
-    command: >
-      sh -c "python manage.py migrate"
+    command: python manage.py migrate
     depends_on:
       db:
         condition: service_healthy
@@ -25,12 +24,11 @@ services:
 
   api:
     build: .
-    command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/todolist
-#    ports:
-#      - "8000:8000"
+    ports:
+      - "8000:8000"
     depends_on:
       - migrate
     env_file:
@@ -39,6 +37,6 @@ services:
   frontend:
     image: sermalenk/skypro-front:lesson-34
     ports:
-      - "8080:80"
+      - "80:8080"
     depends_on:
       - api
