@@ -27,42 +27,20 @@ ______________________________________
 - Python 3.10
 - Django 4.1.7
 - PostgreSQL
+- Docker
 ______________________________________
 **Подготовка приложения**
 
-***В зависимости от выбранной ОС, команды могут различаться, ниже приведен пример для Windows***
+1) Переименовать `docker-compose_sample.yml` в `docker-compose.yml`
 
-1) Создание виртуального окружения
-``` python
-python -m venv yourvenvname
-source /yourvenvname/scripts/activate.ps1
-```
-
-2) Установка менеджера пакетов Poetry
-``` python
-pip install poetry
-poetry init
-```
-
-3) Установка зависимостей ***(пример с использованием Poetry)***
-``` python
-poetry install
-```
-
-4) Создание `.env` файла с необходимыми значениями переменных:
+2) Переименовать `.env.deploy` в `.env` и присвоить необходимые значения переменным:
 - SECRET_KEY
-- DATABASE_URL в формате psql://user:password@ip:port/database_name
+- В DATABASE_URL заменить `$POSTGRES_USER`, `$POSTGRES_PASSWORD` и `$POSTGRES_DB` на соответствующие значения из `docker-compose.yml`
 
-5) Создание и применение миграции для базы данных
+3) Запустить локальный сервер
 ``` python
-python manage.py makemigrations
-python manage.py migrate
-```
-
-6) Запуск сервера
-``` python
-python manage.py runserver
+docker-compose up -d
 ```
 
 ______________________________________
-**Данный файл будет дополняться в ходе написания приложения**
+**Данный файл будет меняться в ходе написания приложения**
