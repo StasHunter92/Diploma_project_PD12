@@ -4,11 +4,11 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_USER: todolistuser
-      POSTGRES_PASSWORD: todolistpassword
-      POSTGRES_DB: todolist_postgres
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: userpassword
+      POSTGRES_DB: databasename
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "todolistuser", "-d", "todolist_postgres"]
+      test: [ "CMD", "pg_isready", "-U", "username", "-d", "databasename"]
       interval: 2s
       timeout: 2s
       retries: 5
