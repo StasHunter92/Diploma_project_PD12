@@ -17,7 +17,7 @@ services:
 
   migrate:
     image: stashunter/todolist:${GITHUB_REF_NAME}-${GITHUB_RUN_ID}
-    command: python manage.py migrate
+    command: python manage.py makemigrations && python manage.py migrate
     depends_on:
       db:
         condition: service_healthy
