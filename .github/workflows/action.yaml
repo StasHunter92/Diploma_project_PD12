@@ -110,9 +110,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PASSWORD }}
-          #          script: |
-          #            cd diploma_project
-          #            echo ${{ secrets.HOST_PASSWORD }} | sudo -S docker-compose up -d
           script: |
             cd diploma_project
             echo ${{ secrets.HOST_PASSWORD }} | sudo -S sh -c "docker-compose pull && docker-compose up -d"
@@ -124,5 +121,5 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PASSWORD }}
-          script:
-            echo ${{ secrets.HOST_PASSWORD }} | docker system prune -a -f
+          script: |
+            echo ${{ secrets.HOST_PASSWORD }} | sudo -S docker system prune -a -f
