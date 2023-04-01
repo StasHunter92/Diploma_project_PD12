@@ -103,9 +103,8 @@ jobs:
           #            cd diploma_project
           #            echo ${{ secrets.HOST_PASSWORD }} | sudo -S docker-compose up -d
           script: |
-            cd diploma_project |
-            docker-compose pull |
-            docker-compose up -d
+            cd diploma_project
+            echo ${{ secrets.HOST_PASSWORD }} | sudo -S sh -c "docker-compose pull && docker-compose up -d"
 
       - name: Cleanup docker
         if: always()
@@ -115,4 +114,4 @@ jobs:
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PASSWORD }}
           script:
-            docker system prune -a -f
+            echo ${{ secrets.HOST_PASSWORD }} | docker system prune -a -f
