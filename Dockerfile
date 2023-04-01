@@ -13,6 +13,7 @@ COPY diploma_project_pd12/. ./diploma_project_pd12
 COPY manage.py .
 COPY README.MD ./README.md
 
-RUN poetry config virtualenvs.create false && poetry install --no-interaction
+RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-root
+# RUN python manage.py collectstatic -c --no-input
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
