@@ -102,9 +102,9 @@ jobs:
           #          script: |
           #            cd diploma_project
           #            echo ${{ secrets.HOST_PASSWORD }} | sudo -S docker-compose up -d
-          script:
-            cd diploma_project
-            docker-compose pull
+          script: |
+            cd diploma_project |
+            docker-compose pull |
             docker-compose up -d
 
       - name: Cleanup docker
