@@ -64,6 +64,7 @@ jobs:
           mkdir todolist
           cat docker-compose-ci.yaml | envsubst > todolist/docker-compose.yaml
           cat .env.deploy | envsubst > todolist/.env
+          cat nginx.conf > todolist/nginx.conf
 
       - name: Copy compose file to server
         uses: appleboy/scp-action@master
@@ -82,6 +83,16 @@ jobs:
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PASSWORD }}
           source: "todolist/.env"
+          target: "diploma_project"
+          strip_components: 1
+
+      - name: Copy nginx file to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          password: ${{ secrets.HOST_PASSWORD }}
+          source: "todolist/nginx.conf"
           target: "diploma_project"
           strip_components: 1
 
