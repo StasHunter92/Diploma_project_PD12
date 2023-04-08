@@ -40,7 +40,7 @@ services:
       - django_static:/todolist/static
 
   frontend:
-    image: sermalenk/skypro-front:lesson-34
+    image: sermalenk/skypro-front:lesson-35
     container_name: frontend
     ports:
       - "80:80"
