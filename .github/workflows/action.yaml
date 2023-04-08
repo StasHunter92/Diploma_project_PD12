@@ -55,6 +55,8 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       SECRET_KEY: ${{ secrets.SECRET_KEY}}
+      VK_OAUTH2_KEY: ${{ VK_OAUTH2_KEY }}
+      VK_OAUTH2_SECRET: ${{ VK_OAUTH2_SECRET }}
     steps:
       - name: Clone code
         uses: actions/checkout@v2
