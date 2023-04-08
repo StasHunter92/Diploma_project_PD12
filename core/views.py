@@ -15,6 +15,7 @@ class UserSignupView(CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSignupSerializer
 
+
 class UserLoginView(CreateAPIView):
     """Login user"""
     serializer_class = UserLoginSerializer
@@ -38,9 +39,11 @@ class UserLoginView(CreateAPIView):
 
         return Response(data={'password': ['Неправильный пароль']}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UserRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserRetrieveUpdateSerializer
+
     # permission_classes = [IsAuthenticated]
 
     def get_object(self):
@@ -54,6 +57,7 @@ class UserRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
 class UserPasswordUpdateView(UpdateAPIView):
     serializer_class = UserPasswordUpdateSerializer
     model = User
+
     # permission_classes = [IsAuthenticated]
 
     def get_object(self):
@@ -65,7 +69,8 @@ class UserPasswordUpdateView(UpdateAPIView):
 
         if serializer.is_valid():
             if not self.object.check_password(serializer.data.get('old_password')):
-                return Response({"old_password": ["Wrong password passed, try again."]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"old_password": ["Wrong password passed, try again."]},
+                                status=status.HTTP_400_BAD_REQUEST)
             self.object.set_password(serializer.data.get('new_password'))
             self.object.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
