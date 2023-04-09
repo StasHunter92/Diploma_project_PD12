@@ -13,7 +13,6 @@ env = environ.Env(DEBUG=(bool, False))
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Take environment variables from .env file
-# environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 env.read_env(BASE_DIR / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -113,26 +112,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # User model settings
 AUTH_USER_MODEL = 'core.User'
 
+# Rest framework settings
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # Spectacular settings
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Todolist API",
-    "DESCRIPTION": "Documentation for the Diploma Todolist API",
-    "VERSION": "0.1",
+    'TITLE': 'Todolist API',
+    'DESCRIPTION': 'Documentation for the Diploma Todolist API',
+    'VERSION': '0.1',
 }
+
 # VKOauth2 settings
-SOCIAL_AUTH_JSONFIELD_ENABLED = True
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_VK_OAUTH2_KEY = env('VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = env('VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/categories'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/logged-in/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
 SOCIAL_AUTH_USER_MODEL = 'core.User'
