@@ -8,6 +8,7 @@ RUN pip install poetry
 
 COPY pyproject.toml .
 COPY core/. ./core
+COPY goals/. ./goals
 COPY diploma_project_pd12/. ./diploma_project_pd12
 # COPY .env /todolist/.env
 COPY manage.py .
