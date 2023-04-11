@@ -22,7 +22,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
         fields: list[str] = ['id', 'username', 'first_name', 'last_name', 'email', 'password', 'password_repeat']
         read_only_fields: list[str] = ['id']
 
-    def validate(self, validated_data: dict) -> dict | serializers.ValidationError:
+    def validate(self, validated_data: dict) -> dict:
         """
         Check passwords match and delete password_repeat from validated_data
         :param validated_data: Validated data
@@ -51,7 +51,7 @@ class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
 
-    def validate_username(self, username: str) -> str | serializers.ValidationError:
+    def validate_username(self, username: str) -> str:
         """
         Check username doesn't exist in the database
         :param username: Username to check
@@ -68,7 +68,7 @@ class UserRetrieveUpdateSerializer(serializers.ModelSerializer):
     """
     username = serializers.CharField(max_length=150, required=False)
 
-    def validate_username(self, username: str) -> str | serializers.ValidationError:
+    def validate_username(self, username: str) -> str:
         """
         Check username doesn't exist in the database
         :param username: Username to check
@@ -97,7 +97,7 @@ class UserPasswordUpdateSerializer(serializers.ModelSerializer):
         model: User = User
         fields: list[str] = ['old_password', 'new_password']
 
-    def validate_old_password(self, old_password: str) -> str | serializers.ValidationError:
+    def validate_old_password(self, old_password: str) -> str:
         """
         Check old password is correct
         :param old_password: User old password
@@ -108,7 +108,7 @@ class UserPasswordUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Неправильный пароль.')
         return old_password
 
-    def validate_new_password(self, new_password: str) -> str | serializers.ValidationError:
+    def validate_new_password(self, new_password: str) -> str:
         """
         Check new password is not same as old password
         :param new_password: User new password

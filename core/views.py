@@ -34,12 +34,15 @@ class UserLoginView(CreateAPIView):
         :return: Success response or Failure response with error
         """
         serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        if not serializer.is_valid():
-            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # if not serializer.is_valid():
+        #     return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        username: str = request.data.get('username')
-        password: str = request.data.get('password')
+        # username: str = request.data.get('username')
+        # password: str = request.data.get('password')
+        username: str = serializer.validated_data['username']
+        password: str = serializer.validated_data['password']
         user = authenticate(request, username=username, password=password)
 
         if user:
@@ -53,7 +56,7 @@ class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     """
     View for retrieving user information, updating or logout user
     """
-    model = User
+    # model = User
     serializer_class = UserRetrieveUpdateSerializer
     permission_classes = [IsAuthenticated]
 
@@ -73,7 +76,7 @@ class UserPasswordUpdateView(UpdateAPIView):
     """
     View for updating user password
     """
-    model = User
+    # model = User
     serializer_class = UserPasswordUpdateSerializer
     permission_classes = [IsAuthenticated]
 
@@ -86,10 +89,12 @@ class UserPasswordUpdateView(UpdateAPIView):
         :return: Success response or Failure response with error
         """
         serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         user: User = self.get_object()
 
-        if not serializer.is_valid():
-            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # if not serializer.is_valid():
+        #     return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         user.set_password(serializer.validated_data['new_password'])
         user.save(update_fields=['password'])
