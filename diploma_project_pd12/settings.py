@@ -35,7 +35,9 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'rest_framework',
     'social_django',
+    'django_filters',
     'core',
+    'goals',
 ]
 
 # Set middleware classes for the project

@@ -11,6 +11,7 @@ urlpatterns: list = [
     path('admin/', admin.site.urls),
 
     path('core/', include('core.urls')),
+    path('goals/', include('goals.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
 
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
