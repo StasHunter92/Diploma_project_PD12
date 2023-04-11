@@ -48,6 +48,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
                 goal.save()
         return category
 
+
 # ----------------------------------------------------------------
 class GoalCreateView(CreateAPIView):
     model = Goal
@@ -66,6 +67,7 @@ class GoalListView(ListAPIView):
     # ordering_param = ['priority', 'due_date']
     ordering = ['-priority', 'due_date']
     search_fields = ['title']
+
     def get_queryset(self):
         return Goal.objects.filter(user=self.request.user).exclude(status=Goal.Status.archived)
 
