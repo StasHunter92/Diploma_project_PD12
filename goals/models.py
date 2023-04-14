@@ -67,8 +67,6 @@ class Goal(DatesModelMixin):
     created = models.DateTimeField(verbose_name='Дата создания')
     updated = models.DateTimeField(verbose_name='Дата последнего обновления')
 
-    # is_deleted = models.BooleanField(verbose_name='Удалена', default=False)
-
     def __str__(self):
         return self.title
 
@@ -82,7 +80,7 @@ class GoalComment(DatesModelMixin):
     """Goal comment model"""
     goal = models.ForeignKey(Goal, verbose_name='Цель', on_delete=models.CASCADE)
     user = models.ForeignKey(User, verbose_name='Автор', on_delete=models.CASCADE)
-    text = models.CharField(max_length=1000)
+    text = models.CharField(max_length=1000, verbose_name='Текст')
     created = models.DateTimeField(verbose_name='Дата создания')
     updated = models.DateTimeField(verbose_name='Дата последнего обновления')
 
