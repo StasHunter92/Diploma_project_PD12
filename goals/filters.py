@@ -2,12 +2,14 @@ import django_filters
 from django.db import models
 from django_filters import rest_framework
 
-from goals.models import Goal
+from goals.models.goal import Goal
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Create filters
 class GoalDateFilter(rest_framework.FilterSet):
+    """A filter for the Goal model that allows filtering by due_date, category, status, and priority"""
+
     class Meta:
         model = Goal
         fields = {
