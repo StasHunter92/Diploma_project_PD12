@@ -17,6 +17,9 @@ djangorestframework = "^3.14.0"
 drf-spectacular = "^0.26.1"
 social-auth-app-django = "^5.2.0"
 django-filter = "^23.1"
+marshmallow = "^3.19.0"
+marshmallow-dataclass = "^8.5.13"
+transitions = "^0.9.0"
 
 
 [build-system]
