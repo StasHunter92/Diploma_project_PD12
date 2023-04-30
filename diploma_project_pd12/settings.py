@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django_filters',
     'core',
     'goals',
+    'bot',
 ]
 
 # Set middleware classes for the project
@@ -140,3 +141,5 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/logged-in/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
 SOCIAL_AUTH_USER_MODEL = 'core.User'
+
+RANDOM_STRING_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

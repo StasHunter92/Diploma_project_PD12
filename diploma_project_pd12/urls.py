@@ -13,6 +13,7 @@ urlpatterns: list = [
     path('core/', include('core.urls')),
     path('goals/', include('goals.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
+    path('bot/', include('bot.urls')),
 
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema')),
