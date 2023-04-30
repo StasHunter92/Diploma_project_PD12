@@ -40,7 +40,7 @@ class Message:
     optional sender User object, Chat object, date, and optional text
     """
     message_id: int
-    from_: Optional[User] = field(metadata={"data_key": "from"})
+    from_: Optional[User] = field(metadata={'data_key': 'from'})
     chat: Chat
     date: int
     text: Optional[str]

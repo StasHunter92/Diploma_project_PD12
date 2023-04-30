@@ -120,12 +120,12 @@ jobs:
             cd diploma_project
             echo ${{ secrets.HOST_PASSWORD }} | sudo -S sh -c "docker-compose pull && docker-compose up -d"
 
-      - name: Cleanup docker
-        if: always()
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.HOST_USERNAME }}
-          password: ${{ secrets.HOST_PASSWORD }}
-          script: |
-            echo ${{ secrets.HOST_PASSWORD }} | sudo -S docker system prune -a -f
+#      - name: Cleanup docker
+#        if: always()
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          username: ${{ secrets.HOST_USERNAME }}
+#          password: ${{ secrets.HOST_PASSWORD }}
+#          script: |
+#            echo ${{ secrets.HOST_PASSWORD }} | sudo -S docker system prune -a -f

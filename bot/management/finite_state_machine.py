@@ -81,7 +81,7 @@ class BotMachine(object):
         Returns:
             None
         """
-        print('== Блок инициализации ==')
+        print('== Initialize block ==')
         self.create_telegram_user(message)
         self.go_to_verification()
 
@@ -93,9 +93,9 @@ class BotMachine(object):
         Returns:
             None
         """
-        print(f'== Блок верификации ==')
-        while self.state == "verification":
-            print(f'= Цикл блока верификации =')
+        print(f'== Verification block ==')
+        while self.state == 'verification':
+            print(f'= Verification block cycle =')
             update_order: GetUpdatesResponse = self.update_order()
 
             # Check result is not empty
@@ -111,10 +111,10 @@ class BotMachine(object):
 
                     # Check allowed command
                     if message.text == '/confirm':
-                        print(f'Введено подтверждение')
+                        print(f'Confirmed')
 
                         if user.user:
-                            print(f'Пользователь найден')
+                            print(f'User found')
                             keyboard: list[list[str]] = [['/goals', '/create']]
                             reply_markup: str = json.dumps(
                                 {'keyboard': keyboard,
@@ -131,19 +131,19 @@ class BotMachine(object):
                             )
                             self.go_to_main()
 
-                        print(f'Пользователь не найден, код обновлен')
+                        print(f'User not found, update code')
                         self.update_verification_code(user)
 
                     # Check not allowed commands
                     elif message.text in ('/start', '/cancel', '/goals', '/create'):
-                        print(f'Введена неверная команда')
+                        print(f'Command error')
                         self.client.send_message(
                             chat_id=user.tg_chat_id,
                             text=f"Вам недоступно выполнение команд",
                         )
 
                     else:
-                        print(f'Введен текст или команда')
+                        print(f'Unregistered command or text found')
                         self.update_verification_code(user)
 
     # ----------------------------------------------------------------
@@ -154,9 +154,9 @@ class BotMachine(object):
         Returns:
             None
         """
-        print(f'== Основной блок ==')
-        while self.state == "main":
-            print(f'= Цикл основного блока =')
+        print(f'== Main block ==')
+        while self.state == 'main':
+            print(f'= Main block cycle =')
             update_order: GetUpdatesResponse = self.update_order()
 
             # Check result is not empty
@@ -200,14 +200,14 @@ class BotMachine(object):
                         for goal in goals:
                             self.client.send_message(
                                 chat_id=message.chat.id,
-                                text=f"Ваша цель: <a href='http://127.0.0.1/boards/{goal.category.board.id}"
+                                text=f"Ваша цель: <a href='http://just-for.site/boards/{goal.category.board.id}"
                                      f"/categories/{goal.category.id}/goals?goal={goal.id}'><b>{goal.title}</b></a> \n"
                                      f"Категория: {goal.category} \n"
                                      f"Доска: {goal.category.board} \n"
                                      f"Подробности: {goal.description if goal.description != '' else 'Нет описания'}",
                                 parse_mode='HTML'
                             )
-                        print('Получены цели')
+                        print('Get goals')
 
                     # Check allowed command
                     elif item.message.text == '/create':
@@ -249,9 +249,9 @@ class BotMachine(object):
         Return:
             None
         """
-        print(f'== Блок создания категории ==')
+        print(f'== Category block ==')
         last_message: Message = message
-        while self.state == "create_category":
+        while self.state == 'create_category':
             update_order: GetUpdatesResponse = self.update_order()
 
             # Check result is not empty
@@ -277,7 +277,7 @@ class BotMachine(object):
                                  f"Выберите одну из доступных команд:",
                             reply_markup=reply_markup
                         )
-                        print(f'Отмена действия')
+                        print(f'Cancelled')
                         self.cancel()
 
                     category: [Optional[GoalCategory]] = GoalCategory.objects.select_related('board').filter(
@@ -306,7 +306,7 @@ class BotMachine(object):
                         )
 
             self.update_count += 1
-            print(f'Циклов ожидания прошло {self.update_count}')
+            print(f'Update cycles: {self.update_count}')
 
             # Check update count for terminate session
             if self.update_count == 3:
@@ -326,9 +326,9 @@ class BotMachine(object):
         Return:
             None
         """
-        print(f'== Блок создания цели ==')
+        print(f'== Goal block ==')
         last_message: Message = message
-        while self.state == "create_goal":
+        while self.state == 'create_goal':
             update_order: GetUpdatesResponse = self.update_order()
 
             # Check result is not empty
@@ -354,7 +354,7 @@ class BotMachine(object):
                                  f"Выберите одну из доступных команд:",
                             reply_markup=reply_markup
                         )
-                        print(f'Отмена действия')
+                        print(f'Cancelled')
                         self.cancel()
 
                     # One week timedelta
@@ -384,7 +384,7 @@ class BotMachine(object):
                     self.go_to_main_from_create_goal()
 
             self.update_count += 1
-            print(f'Циклов ожидания прошло {self.update_count}')
+            print(f'Update cycles: {self.update_count}')
 
             # Check update count for terminate session
             if self.update_count == 3:
@@ -408,7 +408,7 @@ class BotMachine(object):
             tg_username=message.from_.username,
             verification_code=verification_code
         )
-        print("Пользователь создан")
+        print('User created')
 
         keyboard: list[list[str]] = [['/confirm']]
         reply_markup: str = json.dumps(
@@ -416,12 +416,10 @@ class BotMachine(object):
 
         self.client.send_message(
             chat_id=message.chat.id,
-            text=f"Добро пожаловать, {message.from_.username}!\n"
-                 f"Ваш одноразовый код авторизации: {verification_code}\n"
-                 f"После подтверждения кода в приложении вернитесь сюда и нажмите '/confirm' "
-                 f"для завершения регистрации",
+            text=f"Добро пожаловать, {message.from_.username}! \n"
+                 f"Ваш одноразовый код авторизации: {verification_code} \n",
             reply_markup=reply_markup)
-        print("Приветственное сообщение отправлено")
+        print('Greetings message sent')
 
     # ----------------------------------------------------------------
     def get_telegram_user(self, chat_id: int) -> Optional[TelegramUser]:
@@ -472,9 +470,7 @@ class BotMachine(object):
         self.client.send_message(
             chat_id=user.tg_chat_id,
             text=f"Вы еще не подтвердили код в приложении \n"
-                 f"Ваш новый одноразовый код авторизации: {user.verification_code} \n"
-                 f"После подтверждения кода в приложении вернитесь сюда и нажмите '/confirm' "
-                 f"для завершения регистрации",
+                 f"Ваш новый одноразовый код авторизации: {user.verification_code} \n",
         )
 
     # ----------------------------------------------------------------
@@ -508,7 +504,7 @@ class BotMachine(object):
                  f"Выберите одну из доступных команд:",
             reply_markup=reply_markup
         )
-        print(f'Сессия истекла')
+        print(f'Session expired')
         self.update_count: int = 0
 
         # Check current state

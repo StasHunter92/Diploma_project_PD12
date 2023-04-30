@@ -36,7 +36,8 @@ class TelegramUserVerificationSerializer(serializers.ModelSerializer):
         # Send a success message to the user's Telegram chat
         TgClient(env('TG_TOKEN')).send_message(
             chat_id=telegram_user.tg_chat_id,
-            text='Вы успешно авторизовались в боте!'
+            text="Вы успешно авторизовались в боте! \n"
+                 "Нажмите '/confirm' для завершения регистрации"
         )
 
         return telegram_user
