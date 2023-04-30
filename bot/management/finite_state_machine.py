@@ -377,7 +377,8 @@ class BotMachine(object):
                         text=f"Ваша цель <a href='http://just-for.site/boards/{goal.category.board.id}"
                              f"/categories/{goal.category.id}/goals?goal={goal.id}'><b>{goal.title}</b></a> "
                              f"успешно создана! \n"
-                             f"Вы можете посмотреть ее в приложении, перейдя по ссылке",
+                             f"Вы можете посмотреть ее в приложении, перейдя по ссылке \n\n"
+                             f"Выберите одну из доступных команд:",
                         reply_markup=reply_markup,
                         parse_mode='HTML'
                     )
