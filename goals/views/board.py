@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from goals.models.board import Board
 from goals.models.goal import Goal
 from goals.permissions import BoardPermission
-from goals.serializers.board import BoardCreateSerializer, BoardListSerializer, BoardSerializer
+from goals.serializers.board import BoardCreateSerializer, BoardSerializer
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ class BoardCreateView(CreateAPIView):
 # ----------------------------------------------------------------
 class BoardListView(ListAPIView):
     """API endpoint for retrieving a list of boards"""
-    serializer_class = BoardListSerializer
+    serializer_class = BoardCreateSerializer
     permission_classes: tuple = (IsAuthenticated, BoardPermission)
     pagination_class = LimitOffsetPagination
 

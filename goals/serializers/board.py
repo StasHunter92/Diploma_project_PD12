@@ -42,12 +42,12 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 
 
 # ----------------------------------------------------------------
-class BoardListSerializer(serializers.ModelSerializer):
-    """Serializer for listing boards"""
-
-    class Meta:
-        model = Board
-        fields = '__all__'
+# class BoardListSerializer(serializers.ModelSerializer):
+#     """Serializer for listing boards"""
+#
+#     class Meta:
+#         model = Board
+#         fields = '__all__'
 
 
 # ----------------------------------------------------------------
@@ -79,7 +79,7 @@ class BoardSerializer(serializers.ModelSerializer):
                     old_participant.role = new_by_id[old_participant.user_id]['role']
                     old_participant.save()
 
-                new_by_id.pop(old_participant.user_id)
+                    new_by_id.pop(old_participant.user_id)
 
             # Create new participants
             for new_participant in new_by_id.values():
@@ -89,7 +89,8 @@ class BoardSerializer(serializers.ModelSerializer):
                     role=new_participant['role'])
 
             # Update board with new data
-            board.title = validated_data['title']
-            board.save()
+            if 'title' in validated_data:
+                board.title = validated_data['title']
+                board.save()
 
         return board
