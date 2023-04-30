@@ -105,10 +105,6 @@ class BotMachine(object):
                     message: Optional[Message] = item.message
                     user: Optional[TelegramUser] = self.get_telegram_user(message.from_.id)
 
-                    # Check if user is already verified
-                    if user.user:
-                        self.go_to_main()
-
                     # Check allowed command
                     if message.text == '/confirm':
                         print(f'Confirmed')
