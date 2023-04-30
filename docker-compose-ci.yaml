@@ -40,7 +40,7 @@ services:
       - django_static:/todolist/static
 
   frontend:
-    image: sermalenk/skypro-front:lesson-37
+    image: sermalenk/skypro-front:lesson-38
     container_name: frontend
     ports:
       - "80:80"
@@ -58,6 +58,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  tgbot:
+    image: stashunter/todolist:${GITHUB_REF_NAME}-${GITHUB_RUN_ID}
+    container_name: tgbot
+    command: >
+      sh -c "python manage.py runbot"
+    depends_on:
+      - migrate
+    volumes:
+      - .env:/todolist/.env
 
 volumes:
   django_static:

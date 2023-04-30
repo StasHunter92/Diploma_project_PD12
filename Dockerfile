@@ -9,6 +9,7 @@ RUN pip install poetry
 COPY pyproject.toml .
 COPY core/. ./core
 COPY goals/. ./goals
+COPY bot/. ./bot
 COPY diploma_project_pd12/. ./diploma_project_pd12
 
 COPY manage.py .
