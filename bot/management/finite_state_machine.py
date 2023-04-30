@@ -285,9 +285,14 @@ class BotMachine(object):
                     ).first()
 
                     if category:
+                        keyboard: list[list[str]] = [['/cancel']]
+                        reply_markup: str = json.dumps(
+                            {'keyboard': keyboard, 'resize_keyboard': True, 'one_time_keyboard': False})
+
                         self.client.send_message(
                             chat_id=message.chat.id,
                             text=f"Вы выбрали категорию <b>{category.title}</b>, теперь введите заголовок цели: ",
+                            reply_markup=reply_markup,
                             parse_mode='HTML'
                         )
                         self.update_count: int = 0
@@ -369,7 +374,7 @@ class BotMachine(object):
 
                     self.client.send_message(
                         chat_id=message.chat.id,
-                        text=f"Ваша цель <a href='http://http://just-for.site/boards/{goal.category.board.id}"
+                        text=f"Ваша цель <a href='http://just-for.site/boards/{goal.category.board.id}"
                              f"/categories/{goal.category.id}/goals?goal={goal.id}'><b>{goal.title}</b></a> "
                              f"успешно создана! \n"
                              f"Вы можете посмотреть ее в приложении, перейдя по ссылке",
