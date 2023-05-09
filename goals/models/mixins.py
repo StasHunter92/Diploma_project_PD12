@@ -13,7 +13,11 @@ class DatesModelMixin(models.Model):
         abstract: bool = True
 
     def save(self, *args, **kwargs) -> None:
-        if not self.id:
+        """
+        Overrides the default save method to set created and updated attributes
+        """
+        if not self.pk:
             self.created = timezone.now()
         self.updated = timezone.now()
+
         return super().save(*args, **kwargs)

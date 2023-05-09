@@ -104,7 +104,7 @@ class GoalCommentPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return GoalComment.objects.filter(
                 goal__category__board__participants__user=request.user,
-                goal__category__board=comment.category.board,
+                goal__category__board=comment.goal.category.board,
             ).exists()
 
         return GoalComment.objects.filter(

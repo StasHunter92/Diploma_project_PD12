@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from django.db import models
 
 from core.models import User
@@ -35,7 +37,7 @@ class BoardParticipant(DatesModelMixin):
     role = models.PositiveSmallIntegerField(verbose_name='Роль', choices=Role.choices, default=Role.owner)
 
     class Meta:
-        unique_together: tuple[str] = ('board', 'user')
+        unique_together: Tuple[str, ...] = ('board', 'user')
         verbose_name: str = 'Участник'
         verbose_name_plural: str = 'Участники'
 

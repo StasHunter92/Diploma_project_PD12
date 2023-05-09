@@ -15,7 +15,7 @@ class BoardParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = BoardParticipant
         fields = '__all__'
-        read_only_fields: tuple[str] = ('id', 'created', 'updated', 'board')
+        read_only_fields: tuple[str, ...] = ('id', 'created', 'updated', 'board')
 
 
 # ----------------------------------------------------------------
@@ -26,7 +26,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = '__all__'
-        read_only_fields: tuple[str] = ('id', 'created', 'updated')
+        read_only_fields: tuple[str, ...] = ('id', 'created', 'updated')
 
     def create(self, validated_data: dict) -> Board:
         """Create a new board and add the current user as an owner"""
@@ -59,7 +59,7 @@ class BoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = '__all__'
-        read_only_fields: tuple[str] = ('id', 'created', 'updated')
+        read_only_fields: tuple[str, ...] = ('id', 'created', 'updated')
 
     def update(self, board: Board, validated_data: dict) -> Board:
         """Update a board with new data and create/delete participants"""
