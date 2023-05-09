@@ -46,7 +46,7 @@ class TestCategoryDestroyView:
         goal.refresh_from_db()
 
         assert response.status_code == status.HTTP_204_NO_CONTENT, 'Категория не удалена'
-        assert category.is_deleted == True, 'Статус категории не обновился'
+        assert category.is_deleted, 'Статус категории не обновился'
         assert goal.status == Goal.Status.archived, 'Статус цели не обновился'
 
     # ----------------------------------------------------------------
@@ -87,5 +87,5 @@ class TestCategoryDestroyView:
         goal.refresh_from_db()
 
         assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
-        assert category.is_deleted == False, 'Статус категории обновился'
+        assert not category.is_deleted, 'Статус категории обновился'
         assert not goal.status == Goal.Status.archived, 'Статус цели обновился'

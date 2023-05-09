@@ -20,7 +20,7 @@ jobs:
             "./goals/migrations/"
             "./bot/migrations/"
           max-line-length: "120"
-          ignore: F401,F541
+          ignore: F401,F541,E121
 
   build_push:
     runs-on: ubuntu-latest

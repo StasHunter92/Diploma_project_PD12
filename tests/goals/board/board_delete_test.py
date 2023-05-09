@@ -47,8 +47,8 @@ class TestBoardDestroyView:
         goal.refresh_from_db()
 
         assert response.status_code == status.HTTP_204_NO_CONTENT, 'Доска не удалилась'
-        assert board.is_deleted == True, 'Статус доски не поменялся'
-        assert category.is_deleted == True, 'Статус категории не поменялся'
+        assert board.is_deleted, 'Статус доски не поменялся'
+        assert category.is_deleted, 'Статус категории не поменялся'
         assert goal.status == Goal.Status.archived, 'Статус цели не поменялся'
 
     # ----------------------------------------------------------------
@@ -88,8 +88,8 @@ class TestBoardDestroyView:
         goal.refresh_from_db()
 
         assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
-        assert board.is_deleted == False, 'Статус доски поменялся'
-        assert category.is_deleted == False, 'Статус категории поменялся'
+        assert not board.is_deleted, 'Статус доски поменялся'
+        assert not category.is_deleted, 'Статус категории поменялся'
         assert not goal.status == Goal.Status.archived, 'Статус цели поменялся'
 
     # ----------------------------------------------------------------
