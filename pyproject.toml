@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "todolist for SkyPro diploma project"
 authors = ["Stanislav Meshcheriakov"]
 readme = "README.md"
-packages = [{include = "diploma_project_pd12"}]
+packages = [{ include = "diploma_project_pd12" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -20,8 +20,20 @@ django-filter = "^23.1"
 marshmallow = "^3.19.0"
 marshmallow-dataclass = "^8.5.13"
 transitions = "^0.9.0"
-
+mypy = "^1.2.0"
+django-stubs = { extras = ["compatible-mypy"], version = "^4.2.0" }
+djangorestframework-stubs = { extras = ["compatible-mypy"], version = "^3.14.0" }
+pytest-django = "^4.5.2"
+pytest-factoryboy = "^2.5.1"
+pytest-cov = "^4.0.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+ignore_missing_imports = "True"
+
+[tool.django-stubs]
+django_settings_module = "diploma_project_pd12.settings"
