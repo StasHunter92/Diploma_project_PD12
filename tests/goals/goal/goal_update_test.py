@@ -44,6 +44,7 @@ class TestGoalUpdateView:
 
         update_data: Dict[str, str] = {
             'title': 'New goal title',
+            'category': category.id
         }
 
         response: Response = authenticated_user.put(url, data=update_data)
@@ -89,7 +90,8 @@ class TestGoalUpdateView:
         url: str = reverse('goal', kwargs={'pk': goal.id})
 
         update_data: Dict[str, str] = {
-            'title': 'New goal title'
+            'title': 'New goal title',
+            'category': category.id
         }
 
         response: Response = authenticated_user.put(url, data=update_data)

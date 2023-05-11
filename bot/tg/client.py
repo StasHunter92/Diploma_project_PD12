@@ -1,5 +1,4 @@
 import requests
-from marshmallow import ValidationError
 from requests import Response
 
 from bot.tg.dc import GetUpdatesResponseSchema, SendMessageResponseSchema, GetUpdatesResponse, SendMessageResponse
@@ -48,7 +47,7 @@ class TgClient:
             parse_mode: Mode for parsing entities in the message text
 
         Return:
-            SendMessageResponse: A response object containing information about the sent message
+            SendMessageResponse: A response object containing information about the message
         """
         url: str = self.get_url('sendMessage')
         response: Response = requests.get(
@@ -61,7 +60,4 @@ class TgClient:
             }
         )
         data = response.json()
-        try:
-            return SendMessageResponseSchema().load(data)
-        except ValidationError:
-            print(data)
+        return SendMessageResponseSchema().load(data)

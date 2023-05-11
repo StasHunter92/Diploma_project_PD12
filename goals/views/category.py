@@ -30,7 +30,7 @@ class GoalCategoryListView(ListAPIView):
     pagination_class = LimitOffsetPagination
 
     filter_backends: tuple = (OrderingFilter, SearchFilter, DjangoFilterBackend)
-    ordering_fields: tuple[str] = ('title', 'created')
+    ordering_fields: tuple[str, ...] = ('title', 'created')
     ordering: tuple[str] = ('title',)
     search_fields: tuple[str] = ('title',)
     filterset_fields: tuple[str] = ('board',)
@@ -57,9 +57,9 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
             is_deleted=False)
 
     @atomic
-    def perform_destroy(self, category: GoalCategory) -> GoalCategory:
+    def perform_destroy(self, category: GoalCategory) -> None:
         """Delete a category and archive all of its goals"""
         category.is_deleted = True
         category.save(update_fields=('is_deleted',))
         category.goals.update(status=Goal.Status.archived)
-        return category
+        # return category

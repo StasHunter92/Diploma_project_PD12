@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from rest_framework import serializers
 
 from core.serializers import UserRetrieveUpdateSerializer
@@ -15,7 +17,7 @@ class GoalCommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalComment
         fields = '__all__'
-        read_only_fields: tuple[str] = ('id', 'user', 'created', 'updated')
+        read_only_fields: Tuple[str, ...] = ('id', 'user', 'created', 'updated')
 
     def validate_goal(self, goal: Goal) -> Goal:
         """Validate if the goal is not deleted and the user has permissions to create a comment"""
@@ -36,9 +38,9 @@ class GoalCommentCreateSerializer(serializers.ModelSerializer):
 class GoalCommentSerializer(serializers.ModelSerializer):
     """Serializer for retrieving/updating/deleting comment"""
     user = UserRetrieveUpdateSerializer(read_only=True)
-    goal = serializers.PrimaryKeyRelatedField(read_only=True)
+    goal = serializers.PrimaryKeyRelatedField(queryset=Goal.objects.all())
 
     class Meta:
         model = GoalComment
         fields = '__all__'
-        read_only_fields: tuple[str] = ('id', 'user', 'created', 'updated', 'goal')
+        read_only_fields: Tuple[str, ...] = ('id', 'user', 'created', 'updated', 'goal')

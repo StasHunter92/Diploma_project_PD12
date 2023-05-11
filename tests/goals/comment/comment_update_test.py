@@ -45,6 +45,7 @@ class TestCommentUpdateView:
 
         update_data: Dict[str, str] = {
             'text': 'Updated comment',
+            'goal': goal.id
         }
 
         response: Response = authenticated_user.put(url, data=update_data)
@@ -92,6 +93,7 @@ class TestCommentUpdateView:
 
         update_data: Dict[str, str] = {
             'text': 'Updated comment',
+            'goal': goal.id
         }
 
         response: Response = authenticated_user.put(url, data=update_data)

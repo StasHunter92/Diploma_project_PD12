@@ -30,8 +30,8 @@ class GoalListView(ListAPIView):
     pagination_class = LimitOffsetPagination
 
     filter_backends: tuple = (OrderingFilter, SearchFilter, DjangoFilterBackend)
-    ordering_fields: tuple[str] = ('priority', 'due_date')
-    ordering: tuple[str] = ('-priority', 'due_date')
+    ordering_fields: tuple[str, ...] = ('priority', 'due_date')
+    ordering: tuple[str, ...] = ('-priority', 'due_date')
     search_fields: tuple[str] = ('title',)
     filterset_class = GoalDateFilter
     filterset_fields: tuple[str] = ('category',)
@@ -60,9 +60,9 @@ class GoalView(RetrieveUpdateDestroyAPIView):
         ).exclude(status=Goal.Status.archived)
 
     @atomic()
-    def perform_destroy(self, goal: Goal) -> Goal:
+    def perform_destroy(self, goal: Goal) -> None:
         """Archive a goal and delete all of its comments"""
         goal.status = Goal.Status.archived
         goal.save(update_fields=('status',))
         goal.comments.all().delete()
-        return goal
+        # return goal

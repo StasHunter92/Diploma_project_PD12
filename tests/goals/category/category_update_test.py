@@ -42,7 +42,8 @@ class TestCategoryUpdateView:
         url: str = reverse('category', kwargs={'pk': category.id})
 
         update_data: Dict[str, str] = {
-            'title': 'New category title'
+            'title': 'New category title',
+            'board': board.id
         }
 
         response: Response = authenticated_user.put(url, data=update_data)

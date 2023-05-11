@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from rest_framework import serializers
 
 from core.serializers import UserRetrieveUpdateSerializer
@@ -15,7 +17,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
         fields = '__all__'
-        read_only_fields: tuple[str] = ('id', 'user', 'created', 'updated')
+        read_only_fields: Tuple[str, ...] = ('id', 'user', 'created', 'updated')
 
     def validate_category(self, category: GoalCategory) -> GoalCategory:
         """Validate if the category is not deleted and the user has permissions to create a goal"""
@@ -36,9 +38,9 @@ class GoalCreateSerializer(serializers.ModelSerializer):
 class GoalSerializer(serializers.ModelSerializer):
     """Serializer for retrieving/updating/deleting goal"""
     user = UserRetrieveUpdateSerializer(read_only=True)
-    category = serializers.PrimaryKeyRelatedField(read_only=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=GoalCategory.objects.all())
 
     class Meta:
         model = Goal
         fields = '__all__'
-        read_only_fields: tuple[str] = ('id', 'user', 'created', 'updated')
+        read_only_fields: Tuple[str, ...] = ('id', 'user', 'created', 'updated')
