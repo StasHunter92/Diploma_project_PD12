@@ -3,7 +3,7 @@ diploma_project_pd12 URL Configuration
 """
 from django.contrib import admin
 from django.urls import path, include
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Create main api urls
@@ -16,5 +16,6 @@ urlpatterns: list = [
     path('bot/', include('bot.urls')),
 
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema')),
+    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]

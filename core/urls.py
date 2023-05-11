@@ -5,7 +5,7 @@ from django.urls import path
 from core import views
 
 # ----------------------------------------------------------------------------------------------------------------------
-# Create user urls
+# Create Core app urls
 urlpatterns: List = [
     path('signup', views.UserSignupView.as_view(), name='signup'),
     path('login', views.UserLoginView.as_view(), name='login'),

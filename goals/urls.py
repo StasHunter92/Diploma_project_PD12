@@ -1,8 +1,12 @@
+from typing import List
+
 from django.urls import path
 
 from goals.views import board, category, goal, comment
 
-urlpatterns = [
+# ----------------------------------------------------------------------------------------------------------------------
+# Create Goal app urls
+urlpatterns: List = [
     # Board urls
     path('board/create', board.BoardCreateView.as_view(), name='board_create'),
     path('board/list', board.BoardListView.as_view(), name='board_list'),
