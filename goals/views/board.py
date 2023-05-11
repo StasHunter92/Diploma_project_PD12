@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db.models import QuerySet
 from django.db.transaction import atomic
 
@@ -31,7 +33,7 @@ class BoardListView(ListAPIView):
 
     def get_queryset(self) -> QuerySet[Board]:
         """Return a queryset of boards the user is a participant of"""
-        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
+        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)  # type: ignore
 
 
 # ----------------------------------------------------------------
@@ -42,13 +44,13 @@ class BoardView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self) -> QuerySet[Board]:
         """Return a queryset of boards the user is a participant of"""
-        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
+        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)  # type: ignore
 
     @atomic()
-    def perform_destroy(self, board: Board) -> Board:
+    def perform_destroy(self, board: Board) -> None:
         """Delete a board with all categories and archive all of its goals"""
         board.is_deleted = True
         board.save(update_fields=('is_deleted',))
         board.categories.update(is_deleted=True)
         Goal.objects.filter(category__board=board).update(status=Goal.Status.archived)
-        return board
+        # return board
