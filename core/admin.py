@@ -12,38 +12,30 @@ from core.models import User
 class CustomAdmin(UserAdmin):
     """Custom settings for admin panel"""
     fieldsets: Tuple[Tuple[Optional[str], Dict[str, Tuple[str, ...]]], ...] = (  # type: ignore
-        (None,
-         {
-             "fields": ("username",)
-         }
-         ),
-        (_("Personal info"),
-         {
-             "fields": (
-                 "first_name",
-                 "last_name",
-                 "email")
-         }
-         ),
-        (_("Permissions"),
-         {
-             "fields": (
-                 "is_active",
-                 "is_staff",
-                 "is_superuser",
-                 "groups",
-                 "user_permissions",
-             ),
-         },
-         ),
-        (_("Important dates"),
-         {
-             "fields": (
-                 "last_login",
-                 "date_joined"
-             )
-         }
-         ),
+        (None, {
+            "fields": ("username",)
+        }),
+        (_("Personal info"), {
+            "fields": (
+                "first_name",
+                "last_name",
+                "email")
+        }),
+        (_("Permissions"), {
+            "fields": (
+                "is_active",
+                "is_staff",
+                "is_superuser",
+                "groups",
+                "user_permissions",
+            ),
+        }),
+        (_("Important dates"), {
+            "fields": (
+                "last_login",
+                "date_joined"
+            )
+        }),
     )
     readonly_fields: tuple[str, ...] = ('last_login', 'date_joined')
 

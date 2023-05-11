@@ -30,10 +30,15 @@ class BoardParticipantAdmin(admin.ModelAdmin):
 
     fieldsets: Tuple[Tuple] = (  # type: ignore
         ('Общая информация', {
-            'fields': ('board', 'user', 'role')
+            'fields': (
+                'board',
+                'user',
+                'role')
         }),
         ('Информация о дате', {
-            'fields': ('created', 'updated')
+            'fields': (
+                'created',
+                'updated')
         }),
     )
 
@@ -50,13 +55,17 @@ class GoalCategoryAdmin(admin.ModelAdmin):
 
     fieldsets: Tuple[Tuple] = (  # type: ignore
         ('Общая информация', {
-            'fields': ('user', 'title')
+            'fields': (
+                'user',
+                'title')
         }),
         ('Статус', {
             'fields': ('is_deleted',)
         }),
         ('Информация о дате', {
-            'fields': ('created', 'updated')
+            'fields': (
+                'created',
+                'updated')
         }),
     )
 
@@ -73,13 +82,22 @@ class GoalAdmin(admin.ModelAdmin):
 
     fieldsets: Tuple[Tuple] = (  # type: ignore
         ('Общая информация', {
-            'fields': ('user', 'title', 'description')
+            'fields': (
+                'user',
+                'title',
+                'description')
         }),
         ('Техническая информация', {
-            'fields': ('category', 'status', 'priority')
+            'fields': (
+                'category',
+                'status',
+                'priority')
         }),
         ('Информация о дате', {
-            'fields': ('due_date', 'created', 'updated')
+            'fields': (
+                'due_date',
+                'created',
+                'updated')
         }),
     )
 
@@ -96,13 +114,17 @@ class GoalCommentAdmin(admin.ModelAdmin):
 
     fieldsets: Tuple[Tuple] = (  # type: ignore
         ('Общая информация', {
-            'fields': ('user', 'goal')
+            'fields': (
+                'user',
+                'goal')
         }),
         ('Комментарий', {
             'fields': ('text',)
         }),
         ('Информация о дате', {
-            'fields': ('created', 'updated')
+            'fields': (
+                'created',
+                'updated')
         }),
     )
 
