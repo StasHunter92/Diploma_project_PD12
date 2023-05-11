@@ -1,16 +1,9 @@
 from typing import Dict, Tuple
 
-# from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
-
 from rest_framework import serializers
 
 from core.models import User
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-# Get user model from project
-# User = get_user_model()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -30,7 +23,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
     def validate(self, validated_data: Dict) -> Dict:
         """
-        Checks if 'password' and 'password_repeat' match
+        Checks that 'password' and 'password_repeat' match
         and remove 'password_repeat' from 'validated_data'
 
         Args:
@@ -75,7 +68,7 @@ class UserLoginSerializer(serializers.Serializer):
 
     def validate_username(self, username: str) -> str:
         """
-        Checks if the given username exists in the database
+        Checks that given username exists in the database
 
         Args:
             username: The username to check

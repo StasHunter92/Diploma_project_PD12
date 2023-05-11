@@ -119,20 +119,20 @@ class TestCoreViews:
             'last_name': 'User',
         }
 
-        response: Response = authenticated_user.patch(url, data=update_data)
+        response = authenticated_user.patch(url, data=update_data)
 
         assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
         assert response.data['first_name'] == update_data['first_name'], 'Имя не обновилось'
         assert response.data['last_name'] == update_data['last_name'], 'Фамилия не обновилась'
 
         # Check DELETE request
-        response: Response = authenticated_user.delete(url)
+        response = authenticated_user.delete(url)
 
         assert response.status_code == status.HTTP_204_NO_CONTENT, 'Пользователь не вышел'
 
         # Check unauthorized GET request
         api_client.logout()
-        response: Response = api_client.get(url)
+        response = api_client.get(url)
         assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не был дан'
 
     # ----------------------------------------------------------------

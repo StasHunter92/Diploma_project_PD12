@@ -10,7 +10,8 @@ from marshmallow import EXCLUDE
 @dataclass
 class Chat:
     """
-    Represents a Telegram chat object with an ID and optional first name, last name, and username
+    Represents a Telegram chat object with an ID
+    and optional first name, last name, and username
     """
     id: int
     first_name: Optional[str]
@@ -23,7 +24,10 @@ class Chat:
 
 @dataclass
 class User:
-    """Represents a Telegram user object with an ID, first name, optional last name, and optional username"""
+    """
+    Represents a Telegram user object with an ID,
+    first name, optional last name, and optional username
+    """
     id: int
     first_name: str
     last_name: Optional[str]
@@ -37,10 +41,10 @@ class User:
 class Message:
     """
     Represents a Telegram message object with a message ID,
-    optional sender User object, Chat object, date, and optional text
+    sender User object, Chat object, date, and optional text
     """
     message_id: int
-    from_: Optional[User] = field(metadata={'data_key': 'from'})
+    from_: User = field(metadata={'data_key': 'from'})
     chat: Chat
     date: int
     text: Optional[str]
@@ -51,7 +55,10 @@ class Message:
 
 @dataclass
 class Update:
-    """Represents a Telegram update object with an update ID and optional Message object"""
+    """
+    Represents a Telegram update object with an update ID
+    and optional Message object
+    """
     update_id: int
     message: Optional[Message]
 

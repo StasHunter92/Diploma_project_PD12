@@ -1,7 +1,10 @@
+from typing import Any
+
 from rest_framework.generics import UpdateAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import BaseSerializer
 
 from bot.models import TelegramUser
 from bot.serializers import TelegramUserVerificationSerializer
@@ -39,9 +42,9 @@ class TelegramUserVerificationView(UpdateAPIView):
         Returns:
             Response: A response containing the serialized data of the updated 'TelegramUser' object
         """
-        user: User = request.user
+        user: User = request.user  # type: ignore
         telegram_user: TelegramUser = self.get_object()
-        serializer: TelegramUserVerificationSerializer = self.get_serializer(
+        serializer: BaseSerializer[Any] = self.get_serializer(
             instance=telegram_user,
             data=request.data
         )

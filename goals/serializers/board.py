@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from django.db import transaction
 from rest_framework import serializers
 
@@ -15,7 +17,7 @@ class BoardParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = BoardParticipant
         fields = '__all__'
-        read_only_fields: tuple[str, ...] = ('id', 'created', 'updated', 'board')
+        read_only_fields: Tuple[str, ...] = ('id', 'created', 'updated', 'board')
 
 
 # ----------------------------------------------------------------
@@ -29,7 +31,12 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         read_only_fields: tuple[str, ...] = ('id', 'created', 'updated')
 
     def create(self, validated_data: dict) -> Board:
-        """Create a new board and add the current user as an owner"""
+        """
+        Create a new board and add the current user as an owner
+
+        Returns:
+            Created board
+        """
         user = validated_data.pop('user')
         board: Board = Board.objects.create(**validated_data)
 
@@ -39,15 +46,6 @@ class BoardCreateSerializer(serializers.ModelSerializer):
             role=BoardParticipant.Role.owner)
 
         return board
-
-
-# ----------------------------------------------------------------
-# class BoardListSerializer(serializers.ModelSerializer):
-#     """Serializer for listing boards"""
-#
-#     class Meta:
-#         model = Board
-#         fields = '__all__'
 
 
 # ----------------------------------------------------------------
@@ -62,7 +60,12 @@ class BoardSerializer(serializers.ModelSerializer):
         read_only_fields: tuple[str, ...] = ('id', 'created', 'updated')
 
     def update(self, board: Board, validated_data: dict) -> Board:
-        """Update a board with new data and create/delete participants"""
+        """
+        Update a board with new data and create/delete participants
+
+        Returns:
+            Updated board
+        """
         # Extract required data from validated_data
         owner = validated_data.pop('user')
         new_participants = validated_data.pop('participants')

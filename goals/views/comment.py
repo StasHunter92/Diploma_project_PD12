@@ -29,7 +29,7 @@ class GoalCommentListView(ListAPIView):
     pagination_class = LimitOffsetPagination
 
     filter_backends: tuple = (OrderingFilter, DjangoFilterBackend)
-    ordering_fields: tuple[str] = ('created', 'updated')
+    ordering_fields: tuple[str, ...] = ('created', 'updated')
     ordering: tuple[str] = ('-created',)
     filterset_fields: tuple[str] = ('goal',)
 
