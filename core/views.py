@@ -9,7 +9,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from core.models import User
-from core.serializers import UserSignupSerializer, UserLoginSerializer, UserRetrieveUpdateSerializer, UserPasswordUpdateSerializer
+from core.serializers import UserSignupSerializer, \
+    UserLoginSerializer, UserRetrieveUpdateSerializer, \
+    UserPasswordUpdateSerializer
 
 
 # ----------------------------------------------------------------------------------------------------------------------
