@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('goals', '0004_remove_goal_is_deleted'),
+        ("goals", "0004_remove_goal_is_deleted"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='goalcomment',
-            name='text',
-            field=models.CharField(max_length=1000, verbose_name='Текст'),
+            model_name="goalcomment",
+            name="text",
+            field=models.CharField(max_length=1000, verbose_name="Текст"),
         ),
     ]

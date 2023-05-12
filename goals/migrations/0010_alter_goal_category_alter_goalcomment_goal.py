@@ -5,20 +5,29 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('goals', '0009_rename_name_board_title_alter_boardparticipant_board_and_more'),
+        ("goals", "0009_rename_name_board_title_alter_boardparticipant_board_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='goal',
-            name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='goals', to='goals.goalcategory', verbose_name='Категория'),
+            model_name="goal",
+            name="category",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="goals",
+                to="goals.goalcategory",
+                verbose_name="Категория",
+            ),
         ),
         migrations.AlterField(
-            model_name='goalcomment',
-            name='goal',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='goals.goal', verbose_name='Цель'),
+            model_name="goalcomment",
+            name="goal",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="comments",
+                to="goals.goal",
+                verbose_name="Цель",
+            ),
         ),
     ]

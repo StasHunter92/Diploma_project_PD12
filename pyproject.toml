@@ -26,6 +26,8 @@ djangorestframework-stubs = { extras = ["compatible-mypy"], version = "^3.14.0" 
 pytest-django = "^4.5.2"
 pytest-factoryboy = "^2.5.1"
 pytest-cov = "^4.0.0"
+black = "^23.3.0"
+pyink = "^23.3.1"
 
 [build-system]
 requires = ["poetry-core"]

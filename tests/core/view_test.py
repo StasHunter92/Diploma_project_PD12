@@ -39,18 +39,22 @@ class TestCoreViews:
         Raises:
             AssertionError
         """
-        url: str = reverse('signup')
+        url: str = reverse("signup")
 
         signup_data: Dict[str, str] = {
-            'username': 'new_username',
-            'password': 'new_testp@ssword',
-            'password_repeat': 'new_testp@ssword',
+            "username": "new_username",
+            "password": "new_testp@ssword",
+            "password_repeat": "new_testp@ssword",
         }
 
         response: Response = api_client.post(url, data=signup_data)
 
-        assert response.status_code == status.HTTP_201_CREATED, 'Пользователь не создался'
-        assert User.objects.filter(username=signup_data['username']).exists(), 'Пользователя не существует'
+        assert (
+            response.status_code == status.HTTP_201_CREATED
+        ), "Пользователь не создался"
+        assert User.objects.filter(
+            username=signup_data["username"]
+        ).exists(), "Пользователя не существует"
 
     # ----------------------------------------------------------------
     def test_user_login(self, api_client, user) -> None:
@@ -71,19 +75,23 @@ class TestCoreViews:
         Raises:
             AssertionError
         """
-        url: str = reverse('login')
+        url: str = reverse("login")
         login_data: Dict[str, str] = {
-            'username': 'username',
-            'password': 'testp@ssword',
+            "username": "username",
+            "password": "testp@ssword",
         }
 
         response: Response = api_client.post(url, data=login_data)
 
-        assert response.status_code == status.HTTP_201_CREATED, 'Пользователь не авторизовался'
-        assert 'sessionid' in response.cookies, 'Сессии нет'
+        assert (
+            response.status_code == status.HTTP_201_CREATED
+        ), "Пользователь не авторизовался"
+        assert "sessionid" in response.cookies, "Сессии нет"
 
     # ----------------------------------------------------------------
-    def test_user_retrieve_update_destroy(self, api_client, authenticated_user, user) -> None:
+    def test_user_retrieve_update_destroy(
+        self, api_client, authenticated_user, user
+    ) -> None:
         """
         Test user profile retrieve, update, and destroy requests to the profile URL
 
@@ -104,36 +112,44 @@ class TestCoreViews:
         Raises:
             AssertionError
         """
-        url: str = reverse('profile')
+        url: str = reverse("profile")
 
         # Check GET request
         response: Response = authenticated_user.get(url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data['first_name'] == user.first_name, 'Имя не совпадает'
-        assert response.data['last_name'] == user.last_name, 'Фамилия не совпадает'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert response.data["first_name"] == user.first_name, "Имя не совпадает"
+        assert response.data["last_name"] == user.last_name, "Фамилия не совпадает"
 
         # Check PATCH request
         update_data: Dict[str, str] = {
-            'first_name': 'Test',
-            'last_name': 'User',
+            "first_name": "Test",
+            "last_name": "User",
         }
 
         response = authenticated_user.patch(url, data=update_data)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data['first_name'] == update_data['first_name'], 'Имя не обновилось'
-        assert response.data['last_name'] == update_data['last_name'], 'Фамилия не обновилась'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert (
+            response.data["first_name"] == update_data["first_name"]
+        ), "Имя не обновилось"
+        assert (
+            response.data["last_name"] == update_data["last_name"]
+        ), "Фамилия не обновилась"
 
         # Check DELETE request
         response = authenticated_user.delete(url)
 
-        assert response.status_code == status.HTTP_204_NO_CONTENT, 'Пользователь не вышел'
+        assert (
+            response.status_code == status.HTTP_204_NO_CONTENT
+        ), "Пользователь не вышел"
 
         # Check unauthorized GET request
         api_client.logout()
         response = api_client.get(url)
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не был дан'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не был дан"
 
     # ----------------------------------------------------------------
     def test_user_password_update(self, authenticated_user, user) -> None:
@@ -153,14 +169,14 @@ class TestCoreViews:
         Raises:
             AssertionError
         """
-        url: str = reverse('update_password')
+        url: str = reverse("update_password")
 
         update_data: Dict[str, str] = {
-            'old_password': 'testp@ssword',
-            'new_password': 'newp@ssword22',
+            "old_password": "testp@ssword",
+            "new_password": "newp@ssword22",
         }
 
         response: Response = authenticated_user.put(url, data=update_data)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert user.check_password(update_data['new_password']), 'Пароль не обновился'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert user.check_password(update_data["new_password"]), "Пароль не обновился"

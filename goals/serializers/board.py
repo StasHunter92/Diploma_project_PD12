@@ -11,24 +11,30 @@ from goals.models.board import Board, BoardParticipant
 # Create serializers
 class BoardParticipantSerializer(serializers.ModelSerializer):
     """Serializer for participants"""
-    role = serializers.ChoiceField(required=True, choices=BoardParticipant.Role.choices[1:])
-    user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+
+    role = serializers.ChoiceField(
+        required=True, choices=BoardParticipant.Role.choices[1:]
+    )
+    user = serializers.SlugRelatedField(
+        slug_field="username", queryset=User.objects.all()
+    )
 
     class Meta:
         model = BoardParticipant
-        fields = '__all__'
-        read_only_fields: Tuple[str, ...] = ('id', 'created', 'updated', 'board')
+        fields = "__all__"
+        read_only_fields: Tuple[str, ...] = ("id", "created", "updated", "board")
 
 
 # ----------------------------------------------------------------
 class BoardCreateSerializer(serializers.ModelSerializer):
     """Serializer for creating a new board"""
+
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Board
-        fields = '__all__'
-        read_only_fields: tuple[str, ...] = ('id', 'created', 'updated')
+        fields = "__all__"
+        read_only_fields: tuple[str, ...] = ("id", "created", "updated")
 
     def create(self, validated_data: dict) -> Board:
         """
@@ -37,13 +43,12 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         Returns:
             Created board
         """
-        user = validated_data.pop('user')
+        user = validated_data.pop("user")
         board: Board = Board.objects.create(**validated_data)
 
         BoardParticipant.objects.create(
-            user=user,
-            board=board,
-            role=BoardParticipant.Role.owner)
+            user=user, board=board, role=BoardParticipant.Role.owner
+        )
 
         return board
 
@@ -51,13 +56,14 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 # ----------------------------------------------------------------
 class BoardSerializer(serializers.ModelSerializer):
     """Serializer for retrieving/updating/deleting board"""
+
     participants = BoardParticipantSerializer(many=True)
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Board
-        fields = '__all__'
-        read_only_fields: tuple[str, ...] = ('id', 'created', 'updated')
+        fields = "__all__"
+        read_only_fields: tuple[str, ...] = ("id", "created", "updated")
 
     def update(self, board: Board, validated_data: dict) -> Board:
         """
@@ -67,9 +73,11 @@ class BoardSerializer(serializers.ModelSerializer):
             Updated board
         """
         # Extract required data from validated_data
-        owner = validated_data.pop('user')
-        new_participants = validated_data.pop('participants')
-        new_by_id: dict = {participant['user'].id: participant for participant in new_participants}
+        owner = validated_data.pop("user")
+        new_participants = validated_data.pop("participants")
+        new_by_id: dict = {
+            participant["user"].id: participant for participant in new_participants
+        }
 
         # Delete participants who are not in new_participants or set a different role
         old_participants = board.participants.exclude(user=owner)
@@ -78,8 +86,8 @@ class BoardSerializer(serializers.ModelSerializer):
                 if old_participant.user_id not in new_by_id:
                     old_participant.delete()
 
-                elif old_participant.role != new_by_id[old_participant.user_id]['role']:
-                    old_participant.role = new_by_id[old_participant.user_id]['role']
+                elif old_participant.role != new_by_id[old_participant.user_id]["role"]:
+                    old_participant.role = new_by_id[old_participant.user_id]["role"]
                     old_participant.save()
 
                     new_by_id.pop(old_participant.user_id)
@@ -88,12 +96,13 @@ class BoardSerializer(serializers.ModelSerializer):
             for new_participant in new_by_id.values():
                 BoardParticipant.objects.create(
                     board=board,
-                    user=new_participant['user'],
-                    role=new_participant['role'])
+                    user=new_participant["user"],
+                    role=new_participant["role"],
+                )
 
             # Update board with new data
-            if 'title' in validated_data:
-                board.title = validated_data['title']
+            if "title" in validated_data:
+                board.title = validated_data["title"]
                 board.save()
 
         return board

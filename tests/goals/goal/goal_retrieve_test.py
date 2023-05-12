@@ -39,13 +39,13 @@ class TestGoalRetrieveView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('goal', kwargs={'pk': goal.id})
+        url: str = reverse("goal", kwargs={"pk": goal.id})
 
         expected_response: Dict = GoalSerializer(goal).data
         response: Response = authenticated_user.get(url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data == expected_response, 'Неправильная цель'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert response.data == expected_response, "Неправильная цель"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -72,13 +72,13 @@ class TestGoalRetrieveView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category, status=Goal.Status.archived)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('goal', kwargs={'pk': goal.id})
+        url: str = reverse("goal", kwargs={"pk": goal.id})
 
         unexpected_response: Dict = GoalSerializer(goal).data
         response: Response = authenticated_user.get(url)
 
-        assert response.status_code == status.HTTP_404_NOT_FOUND, 'Запрос дал результат'
-        assert not response.data == unexpected_response, 'Получена удаленная цель'
+        assert response.status_code == status.HTTP_404_NOT_FOUND, "Запрос дал результат"
+        assert not response.data == unexpected_response, "Получена удаленная цель"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -104,13 +104,13 @@ class TestGoalRetrieveView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
         BoardParticipantFactory(board=board)
-        url: str = reverse('goal', kwargs={'pk': goal.id})
+        url: str = reverse("goal", kwargs={"pk": goal.id})
 
         unexpected_response: Dict = GoalSerializer(goal).data
         response: Response = authenticated_user.get(url)
 
-        assert response.status_code == status.HTTP_404_NOT_FOUND, 'Запрос дал результат'
-        assert not response.data == unexpected_response, 'Получена чужая цель'
+        assert response.status_code == status.HTTP_404_NOT_FOUND, "Запрос дал результат"
+        assert not response.data == unexpected_response, "Получена чужая цель"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -131,8 +131,10 @@ class TestGoalRetrieveView:
         Raises:
             AssertionError
         """
-        url: str = reverse('goal', kwargs={'pk': 1})
+        url: str = reverse("goal", kwargs={"pk": 1})
 
         response: Response = api_client.get(url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

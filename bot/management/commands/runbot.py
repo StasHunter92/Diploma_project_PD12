@@ -9,10 +9,10 @@ from bot.tg.client import TgClient
 # ----------------------------------------------------------------------------------------------------------------------
 # Create a new command
 class Command(BaseCommand):
-    help = 'Run telegram echobot'
+    help = "Run telegram echobot"
 
     def __init__(self, *args, **kwargs):
-        self.client = TgClient(env('TG_TOKEN'))
+        self.client = TgClient(env("TG_TOKEN"))
         super().__init__(*args, **kwargs)
 
     def handle(self, *args, **kwargs) -> None:

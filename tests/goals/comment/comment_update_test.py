@@ -41,22 +41,20 @@ class TestCommentUpdateView:
         goal = GoalFactory(category=category)
         comment = GoalCommentFactory(goal=goal)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('comment', kwargs={'pk': comment.id})
+        url: str = reverse("comment", kwargs={"pk": comment.id})
 
-        update_data: Dict[str, str] = {
-            'text': 'Updated comment',
-            'goal': goal.id
-        }
+        update_data: Dict[str, str] = {"text": "Updated comment", "goal": goal.id}
 
         response: Response = authenticated_user.put(url, data=update_data)
         updated_comment = GoalComment.objects.filter(
-            text=update_data['text'],
-            goal=goal
+            text=update_data["text"], goal=goal
         ).exists()
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data['text'] == update_data['text'], 'Обновленные данные не совпадают'
-        assert updated_comment, 'Комментарий не обновлен'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert (
+            response.data["text"] == update_data["text"]
+        ), "Обновленные данные не совпадают"
+        assert updated_comment, "Комментарий не обновлен"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -85,22 +83,18 @@ class TestCommentUpdateView:
         goal = GoalFactory(category=category)
         comment = GoalCommentFactory(goal=goal)
         BoardParticipantFactory(
-            board=board,
-            user=user,
-            role=BoardParticipant.Role.viewer
+            board=board, user=user, role=BoardParticipant.Role.viewer
         )
-        url: str = reverse('comment', kwargs={'pk': comment.id})
+        url: str = reverse("comment", kwargs={"pk": comment.id})
 
-        update_data: Dict[str, str] = {
-            'text': 'Updated comment',
-            'goal': goal.id
-        }
+        update_data: Dict[str, str] = {"text": "Updated comment", "goal": goal.id}
 
         response: Response = authenticated_user.put(url, data=update_data)
         unexpected_comment = GoalComment.objects.filter(
-            text=update_data['text'],
-            goal=goal
+            text=update_data["text"], goal=goal
         ).exists()
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
-        assert not unexpected_comment, 'Комментарий обновлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"
+        assert not unexpected_comment, "Комментарий обновлен"

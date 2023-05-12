@@ -17,6 +17,7 @@ from goals.serializers.board import BoardCreateSerializer, BoardSerializer
 # Create views
 class BoardCreateView(CreateAPIView):
     """API endpoint for creating a new board"""
+
     model = Board
     serializer_class = BoardCreateSerializer
     permission_classes: tuple = (IsAuthenticated,)
@@ -25,11 +26,12 @@ class BoardCreateView(CreateAPIView):
 # ----------------------------------------------------------------
 class BoardListView(ListAPIView):
     """API endpoint for retrieving a list of boards"""
+
     serializer_class = BoardCreateSerializer
     permission_classes: tuple = (IsAuthenticated, BoardPermission)
     pagination_class = LimitOffsetPagination
 
-    ordering: tuple[str] = ('title',)
+    ordering: tuple[str] = ("title",)
 
     def get_queryset(self) -> QuerySet[Board]:
         """Return a queryset of boards the user is a participant of"""
@@ -39,6 +41,7 @@ class BoardListView(ListAPIView):
 # ----------------------------------------------------------------
 class BoardView(RetrieveUpdateDestroyAPIView):
     """API endpoint for retrieving/updating/deleting a board"""
+
     serializer_class = BoardSerializer
     permission_classes: tuple = (IsAuthenticated, BoardPermission)
 
@@ -50,7 +53,7 @@ class BoardView(RetrieveUpdateDestroyAPIView):
     def perform_destroy(self, board: Board) -> None:
         """Delete a board with all categories and archive all of its goals"""
         board.is_deleted = True
-        board.save(update_fields=('is_deleted',))
+        board.save(update_fields=("is_deleted",))
         board.categories.update(is_deleted=True)
         Goal.objects.filter(category__board=board).update(status=Goal.Status.archived)
         # return board

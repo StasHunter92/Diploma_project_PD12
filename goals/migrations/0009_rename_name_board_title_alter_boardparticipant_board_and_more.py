@@ -6,31 +6,45 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('goals', '0008_alter_goalcategory_board'),
+        ("goals", "0008_alter_goalcategory_board"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='board',
-            old_name='name',
-            new_name='title',
+            model_name="board",
+            old_name="name",
+            new_name="title",
         ),
         migrations.AlterField(
-            model_name='boardparticipant',
-            name='board',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='participants', to='goals.board', verbose_name='Доска'),
+            model_name="boardparticipant",
+            name="board",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="participants",
+                to="goals.board",
+                verbose_name="Доска",
+            ),
         ),
         migrations.AlterField(
-            model_name='boardparticipant',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='participants', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            model_name="boardparticipant",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="participants",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Пользователь",
+            ),
         ),
         migrations.AlterField(
-            model_name='goalcategory',
-            name='board',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='categories', to='goals.board', verbose_name='Доска'),
+            model_name="goalcategory",
+            name="board",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="categories",
+                to="goals.board",
+                verbose_name="Доска",
+            ),
         ),
     ]

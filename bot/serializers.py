@@ -12,12 +12,13 @@ class TelegramUserVerificationSerializer(serializers.ModelSerializer):
     Serializer for verifying a Telegram user's identity
     and linking their account to their Telegram account
     """
+
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = TelegramUser
-        fields = '__all__'
-        read_only_fields = ['tg_chat_id', 'tg_username', 'verification_code']
+        fields = "__all__"
+        read_only_fields = ["tg_chat_id", "tg_username", "verification_code"]
 
     def update(self, telegram_user: TelegramUser, validated_data: dict) -> TelegramUser:
         """
@@ -30,14 +31,14 @@ class TelegramUserVerificationSerializer(serializers.ModelSerializer):
         Returns:
             The updated 'telegram_user' object
         """
-        telegram_user.user = validated_data['user']
-        telegram_user.save(update_fields=('user',))
+        telegram_user.user = validated_data["user"]
+        telegram_user.save(update_fields=("user",))
 
         # Send a success message to the user's Telegram chat
-        TgClient(env('TG_TOKEN')).send_message(
+        TgClient(env("TG_TOKEN")).send_message(
             chat_id=telegram_user.tg_chat_id,
             text="Вы успешно авторизовались в боте! \n"
-                 "Нажмите '/confirm' для завершения регистрации"
+            "Нажмите '/confirm' для завершения регистрации",
         )
 
         return telegram_user

@@ -17,6 +17,7 @@ class TelegramUserVerificationView(UpdateAPIView):
     """
     View for verifying a Telegram user's identity and linking their account to their Telegram account
     """
+
     serializer_class = TelegramUserVerificationSerializer
     permission_classes = [IsAuthenticated]
 
@@ -30,7 +31,9 @@ class TelegramUserVerificationView(UpdateAPIView):
         Raises:
             Http404: If a 'TelegramUser' object with the specified verification code does not exist
         """
-        return get_object_or_404(TelegramUser, verification_code=self.request.data.get('verification_code'))
+        return get_object_or_404(
+            TelegramUser, verification_code=self.request.data.get("verification_code")
+        )
 
     def patch(self, request: Request, *args, **kwargs) -> Response:
         """
@@ -45,8 +48,7 @@ class TelegramUserVerificationView(UpdateAPIView):
         user: User = request.user  # type: ignore
         telegram_user: TelegramUser = self.get_object()
         serializer: BaseSerializer[Any] = self.get_serializer(
-            instance=telegram_user,
-            data=request.data
+            instance=telegram_user, data=request.data
         )
         serializer.is_valid(raise_exception=True)
         serializer.save(user=user)

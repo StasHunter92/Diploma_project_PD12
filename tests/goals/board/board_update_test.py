@@ -38,24 +38,24 @@ class TestBoardUpdateView:
         """
         board = BoardFactory()
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('board', kwargs={'pk': board.id})
+        url: str = reverse("board", kwargs={"pk": board.id})
 
         update_data: Dict[str, Union[str, List]] = {
-            'participants': [],
-            'title': 'New title'
+            "participants": [],
+            "title": "New title",
         }
 
         response: Response = authenticated_user.put(
-            url,
-            data=json.dumps(update_data),
-            content_type='application/json'
+            url, data=json.dumps(update_data), content_type="application/json"
         )
 
-        updated_board = Board.objects.filter(title=update_data['title']).exists()
+        updated_board = Board.objects.filter(title=update_data["title"]).exists()
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data['title'] == update_data['title'], 'Обновленные данные не совпадают'
-        assert updated_board, 'Доска не обновлена'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert (
+            response.data["title"] == update_data["title"]
+        ), "Обновленные данные не совпадают"
+        assert updated_board, "Доска не обновлена"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -81,23 +81,23 @@ class TestBoardUpdateView:
         """
         board = BoardFactory()
         moderator_participant = BoardParticipantFactory(
-            board=board,
-            user=user,
-            role=BoardParticipant.Role.moderator
+            board=board, user=user, role=BoardParticipant.Role.moderator
         )
-        url: str = reverse('board', kwargs={'pk': board.id})
+        url: str = reverse("board", kwargs={"pk": board.id})
         participant = BoardParticipantSerializer(moderator_participant).data
 
         update_data: Dict[str, Union[str, List]] = {
-            'participants': [participant],
-            'title': 'New title'
+            "participants": [participant],
+            "title": "New title",
         }
 
         response: Response = authenticated_user.put(url, data=update_data)
-        unexpected_board = Board.objects.filter(title=update_data['title']).exists()
+        unexpected_board = Board.objects.filter(title=update_data["title"]).exists()
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
-        assert not unexpected_board, 'Доска обновлена'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"
+        assert not unexpected_board, "Доска обновлена"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -120,8 +120,8 @@ class TestBoardUpdateView:
         """
         board = BoardFactory()
         BoardParticipantFactory(board=board)
-        url: str = reverse('board', kwargs={'pk': board.id})
+        url: str = reverse("board", kwargs={"pk": board.id})
 
         response: Response = authenticated_user.put(url)
 
-        assert response.status_code == status.HTTP_404_NOT_FOUND, 'Запрос дал результат'
+        assert response.status_code == status.HTTP_404_NOT_FOUND, "Запрос дал результат"

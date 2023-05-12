@@ -14,7 +14,8 @@ from tests.factories import BoardFactory, GoalCategoryFactory, BoardParticipantF
 # Create tests
 class TestGoalListView:
     """Tests for Goal list view"""
-    url: str = reverse('goal_list')
+
+    url: str = reverse("goal_list")
 
     @pytest.mark.django_db
     def test_active_goal_list_participant(self, authenticated_user, user) -> None:
@@ -42,11 +43,13 @@ class TestGoalListView:
         BoardParticipantFactory(board=board, user=user)
 
         expected_response: Dict = GoalSerializer(active_goals, many=True).data
-        sorted_expected_response: list = sorted(expected_response, key=lambda x: x['priority'])
+        sorted_expected_response: list = sorted(
+            expected_response, key=lambda x: x["priority"]
+        )
         response: Response = authenticated_user.get(self.url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data == sorted_expected_response, 'Списки целей не совпадают'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert response.data == sorted_expected_response, "Списки целей не совпадают"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -72,17 +75,15 @@ class TestGoalListView:
         board = BoardFactory()
         category = GoalCategoryFactory(board=board)
         deleted_goals = GoalFactory.create_batch(
-            size=5,
-            category=category,
-            status=Goal.Status.archived
+            size=5, category=category, status=Goal.Status.archived
         )
         BoardParticipantFactory(board=board, user=user)
 
         unexpected_response: Dict = GoalSerializer(deleted_goals, many=True).data
         response: Response = authenticated_user.get(self.url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert not response.data == unexpected_response, 'Получены удаленные цели'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert not response.data == unexpected_response, "Получены удаленные цели"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -112,8 +113,8 @@ class TestGoalListView:
         unexpected_response: Dict = GoalSerializer(goals, many=True).data
         response: Response = authenticated_user.get(self.url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert not response.data == unexpected_response, 'Получены чужие цели'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert not response.data == unexpected_response, "Получены чужие цели"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -135,4 +136,6 @@ class TestGoalListView:
         """
         response: Response = api_client.get(self.url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

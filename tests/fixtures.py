@@ -16,7 +16,7 @@ def api_client() -> APIClient:
 @pytest.fixture
 def user():
     """A fixture that creates a user instance"""
-    return UserFactory.create(username='username', password='testp@ssword')
+    return UserFactory.create(username="username", password="testp@ssword")
 
 
 @pytest.fixture
@@ -36,4 +36,4 @@ def new_user():
 def due_date():
     """A fixture that creates a date with the timedelta from the current date"""
     due_date: datetime = datetime.date.today() + datetime.timedelta(days=7)
-    return due_date.strftime('%Y-%m-%d')
+    return due_date.strftime("%Y-%m-%d")

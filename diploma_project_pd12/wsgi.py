@@ -8,7 +8,7 @@ from django.core.wsgi import get_wsgi_application
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Set the DJANGO_SETTINGS_MODULE environment variable to the project's settings module
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'diploma_project_pd12.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "diploma_project_pd12.settings")
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Create Django WSGI application

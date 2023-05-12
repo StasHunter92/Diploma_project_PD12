@@ -25,14 +25,11 @@ class BoardPermission(permissions.BasePermission):
 
         if request.method in permissions.SAFE_METHODS:
             return BoardParticipant.objects.filter(
-                user=request.user,
-                board=board
+                user=request.user, board=board
             ).exists()
 
         return BoardParticipant.objects.filter(
-            user=request.user,
-            board=board,
-            role=BoardParticipant.Role.owner
+            user=request.user, board=board, role=BoardParticipant.Role.owner
         ).exists()
 
 
@@ -51,14 +48,16 @@ class GoalCategoryPermission(permissions.BasePermission):
         """
         if request.method in permissions.SAFE_METHODS:
             return GoalCategory.objects.filter(
-                board__participants__user=request.user,
-                board=category.board
+                board__participants__user=request.user, board=category.board
             ).exists()
 
         return GoalCategory.objects.filter(
             board__participants__user=request.user,
             board=category.board,
-            board__participants__role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.moderator]
+            board__participants__role__in=[
+                BoardParticipant.Role.owner,
+                BoardParticipant.Role.moderator,
+            ],
         ).exists()
 
 
@@ -78,13 +77,16 @@ class GoalPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return Goal.objects.filter(
                 category__board__participants__user=request.user,
-                category__board=goal.category.board
+                category__board=goal.category.board,
             ).exists()
 
         return Goal.objects.filter(
             category__board__participants__user=request.user,
             category__board=goal.category.board,
-            category__board__participants__role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.moderator]
+            category__board__participants__role__in=[
+                BoardParticipant.Role.owner,
+                BoardParticipant.Role.moderator,
+            ],
         ).exists()
 
 
@@ -110,5 +112,8 @@ class GoalCommentPermission(permissions.BasePermission):
         return GoalComment.objects.filter(
             goal__category__board__participants__user=request.user,
             goal__category__board=comment.goal.category.board,
-            goal__category__board__participants__role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.moderator]
+            goal__category__board__participants__role__in=[
+                BoardParticipant.Role.owner,
+                BoardParticipant.Role.moderator,
+            ],
         ).exists()

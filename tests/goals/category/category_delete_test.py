@@ -39,15 +39,17 @@ class TestCategoryDestroyView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('category', kwargs={'pk': category.id})
+        url: str = reverse("category", kwargs={"pk": category.id})
 
         response: Response = authenticated_user.delete(url)
         category.refresh_from_db()
         goal.refresh_from_db()
 
-        assert response.status_code == status.HTTP_204_NO_CONTENT, 'Категория не удалена'
-        assert category.is_deleted, 'Статус категории не обновился'
-        assert goal.status == Goal.Status.archived, 'Статус цели не обновился'
+        assert (
+            response.status_code == status.HTTP_204_NO_CONTENT
+        ), "Категория не удалена"
+        assert category.is_deleted, "Статус категории не обновился"
+        assert goal.status == Goal.Status.archived, "Статус цели не обновился"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -76,16 +78,16 @@ class TestCategoryDestroyView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
         BoardParticipantFactory(
-            board=board,
-            user=user,
-            role=BoardParticipant.Role.viewer
+            board=board, user=user, role=BoardParticipant.Role.viewer
         )
-        url: str = reverse('category', kwargs={'pk': category.id})
+        url: str = reverse("category", kwargs={"pk": category.id})
 
         response: Response = authenticated_user.delete(url)
         category.refresh_from_db()
         goal.refresh_from_db()
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
-        assert not category.is_deleted, 'Статус категории обновился'
-        assert not goal.status == Goal.Status.archived, 'Статус цели обновился'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"
+        assert not category.is_deleted, "Статус категории обновился"
+        assert not goal.status == Goal.Status.archived, "Статус цели обновился"

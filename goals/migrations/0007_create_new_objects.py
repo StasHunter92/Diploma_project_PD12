@@ -13,25 +13,21 @@ def create_objects(apps, schema_editor):
     with transaction.atomic():
         for user in User.objects.all():
             new_board = Board.objects.create(
-                name="Мои цели",
-                created=timezone.now(),
-                updated=timezone.now()
+                name="Мои цели", created=timezone.now(), updated=timezone.now()
             )
             BoardParticipant.objects.create(
                 user=user,
                 board=new_board,
                 role=1,
                 created=timezone.now(),
-                updated=timezone.now()
+                updated=timezone.now(),
             )
             GoalCategory.objects.filter(user=user).update(board=new_board)
 
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('goals', '0006_board_goalcategory_board_boardparticipant'),
+        ("goals", "0006_board_goalcategory_board_boardparticipant"),
     ]
 
-    operations = [
-        migrations.RunPython(create_objects)
-    ]
+    operations = [migrations.RunPython(create_objects)]

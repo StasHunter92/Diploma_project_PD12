@@ -36,13 +36,13 @@ class TestBoardRetrieveView:
         """
         board = BoardFactory()
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('board', kwargs={'pk': board.id})
+        url: str = reverse("board", kwargs={"pk": board.id})
 
         expected_response: Dict = BoardSerializer(board).data
         response: Response = authenticated_user.get(url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data == expected_response, 'Неправильная доска'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert response.data == expected_response, "Неправильная доска"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -67,13 +67,13 @@ class TestBoardRetrieveView:
         """
         board = BoardFactory(is_deleted=True)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('board', kwargs={'pk': board.id})
+        url: str = reverse("board", kwargs={"pk": board.id})
 
         unexpected_response: Dict = BoardSerializer(board).data
         response: Response = authenticated_user.get(url)
 
-        assert response.status_code == status.HTTP_404_NOT_FOUND, 'Запрос дал результат'
-        assert not response.data == unexpected_response, 'Получена удаленная доска'
+        assert response.status_code == status.HTTP_404_NOT_FOUND, "Запрос дал результат"
+        assert not response.data == unexpected_response, "Получена удаленная доска"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -97,13 +97,13 @@ class TestBoardRetrieveView:
         """
         board = BoardFactory(is_deleted=True)
         BoardParticipantFactory(board=board)
-        url: str = reverse('board', kwargs={'pk': board.id})
+        url: str = reverse("board", kwargs={"pk": board.id})
 
         unexpected_response: Dict = BoardSerializer(board).data
         response: Response = authenticated_user.get(url)
 
-        assert response.status_code == status.HTTP_404_NOT_FOUND, 'Запрос дал результат'
-        assert not response.data == unexpected_response, 'Получена чужая доска'
+        assert response.status_code == status.HTTP_404_NOT_FOUND, "Запрос дал результат"
+        assert not response.data == unexpected_response, "Получена чужая доска"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -124,8 +124,10 @@ class TestBoardRetrieveView:
         Raises:
             AssertionError
         """
-        url: str = reverse('board', kwargs={'pk': 1})
+        url: str = reverse("board", kwargs={"pk": 1})
 
         response: Response = api_client.get(url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

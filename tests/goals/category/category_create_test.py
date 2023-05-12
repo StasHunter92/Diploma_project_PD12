@@ -14,7 +14,8 @@ from tests.factories import BoardFactory, BoardParticipantFactory
 # Create tests
 class TestCategoryCreateView:
     """Tests for GoalCategory create view"""
-    url: str = reverse('category_create')
+
+    url: str = reverse("category_create")
 
     @pytest.mark.django_db
     def test_category_create_owner_moderator(self, authenticated_user, user) -> None:
@@ -40,19 +41,17 @@ class TestCategoryCreateView:
         BoardParticipantFactory(board=board, user=user)
 
         create_data: Dict[str, Union[str, int]] = {
-            'board': board.pk,
-            'title': 'Owner category'
+            "board": board.pk,
+            "title": "Owner category",
         }
 
         response: Response = authenticated_user.post(self.url, data=create_data)
         created_category = GoalCategory.objects.filter(
-            title=create_data['title'],
-            board=board,
-            user=user
+            title=create_data["title"], board=board, user=user
         ).exists()
 
-        assert response.status_code == status.HTTP_201_CREATED, 'Категория не создалась'
-        assert created_category, 'Созданной категории не существует'
+        assert response.status_code == status.HTTP_201_CREATED, "Категория не создалась"
+        assert created_category, "Созданной категории не существует"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -76,23 +75,27 @@ class TestCategoryCreateView:
             AssertionError
         """
         board = BoardFactory()
-        BoardParticipantFactory(board=board, user=user, role=BoardParticipant.Role.viewer)
+        BoardParticipantFactory(
+            board=board, user=user, role=BoardParticipant.Role.viewer
+        )
 
         create_data: Dict[str, Union[str, int]] = {
-            'board': board.pk,
-            'title': 'Viewer category'
+            "board": board.pk,
+            "title": "Viewer category",
         }
 
         response: Response = authenticated_user.post(self.url, data=create_data)
         unexpected_category = GoalCategory.objects.filter(
-            title=create_data['title'],
-            board=board,
-            user=user
+            title=create_data["title"], board=board, user=user
         ).exists()
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST, 'Отказ в доступе не предоставлен'
-        assert response.data['board'][0] == 'Вы не можете создавать категории', 'Вы можете создать категорию'
-        assert not unexpected_category, 'Категория создана'
+        assert (
+            response.status_code == status.HTTP_400_BAD_REQUEST
+        ), "Отказ в доступе не предоставлен"
+        assert (
+            response.data["board"][0] == "Вы не можете создавать категории"
+        ), "Вы можете создать категорию"
+        assert not unexpected_category, "Категория создана"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -118,20 +121,22 @@ class TestCategoryCreateView:
         BoardParticipantFactory(board=board, user=user)
 
         create_data: Dict[str, Union[str, int]] = {
-            'board': board.pk,
-            'title': 'Deleted board category'
+            "board": board.pk,
+            "title": "Deleted board category",
         }
 
         response: Response = authenticated_user.post(self.url, data=create_data)
         unexpected_category = GoalCategory.objects.filter(
-            title=create_data['title'],
-            board=board,
-            user=user
+            title=create_data["title"], board=board, user=user
         ).exists()
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST, 'Отказ в доступе не предоставлен'
-        assert response.data['board'][0] == 'Доска удалена', 'Вы можете создать категорию'
-        assert not unexpected_category, 'Категория создана'
+        assert (
+            response.status_code == status.HTTP_400_BAD_REQUEST
+        ), "Отказ в доступе не предоставлен"
+        assert (
+            response.data["board"][0] == "Доска удалена"
+        ), "Вы можете создать категорию"
+        assert not unexpected_category, "Категория создана"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -153,4 +158,6 @@ class TestCategoryCreateView:
         """
         response: Response = api_client.post(self.url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

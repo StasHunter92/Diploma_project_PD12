@@ -6,31 +6,90 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('goals', '0001_initial'),
+        ("goals", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Goal',
+            name="Goal",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255, verbose_name='Название')),
-                ('description', models.CharField(blank=True, max_length=255, verbose_name='Описание')),
-                ('status', models.PositiveSmallIntegerField(choices=[(1, 'Запланировано'), (2, 'В процессе'), (3, 'Выполнено'), (4, 'Архив')], default=1, verbose_name='Статус')),
-                ('priority', models.PositiveSmallIntegerField(choices=[(1, 'Низкий'), (2, 'Средний'), (3, 'Высокий'), (4, 'Критический')], default=2, verbose_name='Приоритет')),
-                ('due_date', models.DateField(blank=True, verbose_name='Дата дедлайна')),
-                ('created', models.DateTimeField(verbose_name='Дата создания')),
-                ('updated', models.DateTimeField(verbose_name='Дата последнего обновления')),
-                ('is_deleted', models.BooleanField(default=False, verbose_name='Удалена')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='goals.goalcategory', verbose_name='Категория')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255, verbose_name="Название")),
+                (
+                    "description",
+                    models.CharField(
+                        blank=True, max_length=255, verbose_name="Описание"
+                    ),
+                ),
+                (
+                    "status",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (1, "Запланировано"),
+                            (2, "В процессе"),
+                            (3, "Выполнено"),
+                            (4, "Архив"),
+                        ],
+                        default=1,
+                        verbose_name="Статус",
+                    ),
+                ),
+                (
+                    "priority",
+                    models.PositiveSmallIntegerField(
+                        choices=[
+                            (1, "Низкий"),
+                            (2, "Средний"),
+                            (3, "Высокий"),
+                            (4, "Критический"),
+                        ],
+                        default=2,
+                        verbose_name="Приоритет",
+                    ),
+                ),
+                (
+                    "due_date",
+                    models.DateField(blank=True, verbose_name="Дата дедлайна"),
+                ),
+                ("created", models.DateTimeField(verbose_name="Дата создания")),
+                (
+                    "updated",
+                    models.DateTimeField(verbose_name="Дата последнего обновления"),
+                ),
+                (
+                    "is_deleted",
+                    models.BooleanField(default=False, verbose_name="Удалена"),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="goals.goalcategory",
+                        verbose_name="Категория",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Автор",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Цель',
-                'verbose_name_plural': 'Цели',
+                "verbose_name": "Цель",
+                "verbose_name_plural": "Цели",
             },
         ),
     ]

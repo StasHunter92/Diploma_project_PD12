@@ -15,7 +15,8 @@ from tests.factories import BoardFactory, BoardParticipantFactory, GoalCategoryF
 # Create tests
 class TestCommentCreateView:
     """Tests for GoalComment create view"""
-    url: str = reverse('comment_create')
+
+    url: str = reverse("comment_create")
 
     @pytest.mark.django_db
     def test_comment_create_owner_moderator(self, authenticated_user, user) -> None:
@@ -43,19 +44,19 @@ class TestCommentCreateView:
         BoardParticipantFactory(board=board, user=user)
 
         create_data: Dict[str, Union[str, int]] = {
-            'goal': goal.id,
-            'text': 'New comment',
+            "goal": goal.id,
+            "text": "New comment",
         }
 
         response: Response = authenticated_user.post(self.url, data=create_data)
         created_comment = GoalComment.objects.filter(
-            user=user,
-            goal=goal,
-            text=create_data['text']
+            user=user, goal=goal, text=create_data["text"]
         ).exists()
 
-        assert response.status_code == status.HTTP_201_CREATED, 'Комментарий не создался'
-        assert created_comment, 'Созданного комментария не существует'
+        assert (
+            response.status_code == status.HTTP_201_CREATED
+        ), "Комментарий не создался"
+        assert created_comment, "Созданного комментария не существует"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -82,26 +83,26 @@ class TestCommentCreateView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
         BoardParticipantFactory(
-            board=board,
-            user=user,
-            role=BoardParticipant.Role.viewer
+            board=board, user=user, role=BoardParticipant.Role.viewer
         )
 
         create_data: Dict[str, Union[str, int]] = {
-            'goal': goal.id,
-            'text': 'New comment',
+            "goal": goal.id,
+            "text": "New comment",
         }
 
         response: Response = authenticated_user.post(self.url, data=create_data)
         unexpected_comment = GoalComment.objects.filter(
-            user=user,
-            goal=goal,
-            text=create_data['text']
+            user=user, goal=goal, text=create_data["text"]
         ).exists()
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST, 'Отказ в доступе не предоставлен'
-        assert response.data['goal'][0] == 'Вы не можете оставлять комментарии', 'Вы можете создать комментарий'
-        assert not unexpected_comment, 'Комментарий создан'
+        assert (
+            response.status_code == status.HTTP_400_BAD_REQUEST
+        ), "Отказ в доступе не предоставлен"
+        assert (
+            response.data["goal"][0] == "Вы не можете оставлять комментарии"
+        ), "Вы можете создать комментарий"
+        assert not unexpected_comment, "Комментарий создан"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -129,20 +130,22 @@ class TestCommentCreateView:
         BoardParticipantFactory(board=board, user=user)
 
         create_data: Dict[str, Union[str, int]] = {
-            'goal': goal.id,
-            'text': 'New comment',
+            "goal": goal.id,
+            "text": "New comment",
         }
 
         response: Response = authenticated_user.post(self.url, data=create_data)
         unexpected_comment = GoalComment.objects.filter(
-            user=user,
-            goal=goal,
-            text=create_data['text']
+            user=user, goal=goal, text=create_data["text"]
         ).exists()
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST, 'Отказ в доступе не предоставлен'
-        assert response.data['goal'][0] == 'Цель удалена', 'Вы можете создать комментарий'
-        assert not unexpected_comment, 'Комментарий создан'
+        assert (
+            response.status_code == status.HTTP_400_BAD_REQUEST
+        ), "Отказ в доступе не предоставлен"
+        assert (
+            response.data["goal"][0] == "Цель удалена"
+        ), "Вы можете создать комментарий"
+        assert not unexpected_comment, "Комментарий создан"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -164,4 +167,6 @@ class TestCommentCreateView:
         """
         response: Response = api_client.post(self.url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

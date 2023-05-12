@@ -14,7 +14,8 @@ from tests.factories import BoardFactory, GoalCategoryFactory, BoardParticipantF
 # Create tests
 class TestCategoryListView:
     """Tests for GoalCategory list view"""
-    url: str = reverse('category_list')
+
+    url: str = reverse("category_list")
 
     @pytest.mark.django_db
     def test_active_category_list_participant(self, authenticated_user, user) -> None:
@@ -40,12 +41,18 @@ class TestCategoryListView:
         active_categories = GoalCategoryFactory.create_batch(size=5, board=board)
         BoardParticipantFactory(board=board, user=user)
 
-        expected_response: Dict = GoalCategorySerializer(active_categories, many=True).data
-        sorted_expected_response: list = sorted(expected_response, key=lambda x: x['title'])
+        expected_response: Dict = GoalCategorySerializer(
+            active_categories, many=True
+        ).data
+        sorted_expected_response: list = sorted(
+            expected_response, key=lambda x: x["title"]
+        )
         response: Response = authenticated_user.get(self.url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data == sorted_expected_response, 'Списки категорий не совпадают'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert (
+            response.data == sorted_expected_response
+        ), "Списки категорий не совпадают"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -69,14 +76,18 @@ class TestCategoryListView:
             AssertionError
         """
         board = BoardFactory()
-        deleted_categories = GoalCategoryFactory.create_batch(size=5, board=board, is_deleted=True)
+        deleted_categories = GoalCategoryFactory.create_batch(
+            size=5, board=board, is_deleted=True
+        )
         BoardParticipantFactory(board=board, user=user)
 
-        unexpected_response: Dict = GoalCategorySerializer(deleted_categories, many=True).data
+        unexpected_response: Dict = GoalCategorySerializer(
+            deleted_categories, many=True
+        ).data
         response: Response = authenticated_user.get(self.url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert not response.data == unexpected_response, 'Получены удаленные категории'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert not response.data == unexpected_response, "Получены удаленные категории"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -105,8 +116,8 @@ class TestCategoryListView:
         unexpected_response: Dict = BoardCreateSerializer(categories, many=True).data
         response: Response = authenticated_user.get(self.url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert not response.data == unexpected_response, 'Получены чужие категории'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert not response.data == unexpected_response, "Получены чужие категории"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -128,4 +139,6 @@ class TestCategoryListView:
         """
         response: Response = api_client.get(self.url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

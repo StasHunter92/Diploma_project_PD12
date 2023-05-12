@@ -7,6 +7,7 @@ from bot.tg.dc import GetUpdatesResponseSchema, SendMessageResponseSchema, GetUp
 # ----------------------------------------------------------------------------------------------------------------------
 # Create client
 class TgClient:
+
     def __init__(self, token: str) -> None:
         self.token = token
 
@@ -25,18 +26,16 @@ class TgClient:
         Return:
             GetUpdatesResponse: A response object that holds information about the updates returned by the API
         """
-        url: str = self.get_url('getUpdates')
+        url: str = self.get_url("getUpdates")
         response: Response = requests.get(
-            url=url,
-            params={
-                'offset': offset,
-                'timeout': timeout
-            }
+            url=url, params={"offset": offset, "timeout": timeout}
         )
         data = response.json()
         return GetUpdatesResponseSchema().load(data)
 
-    def send_message(self, chat_id: int, text: str, reply_markup=None, parse_mode=None) -> SendMessageResponse:
+    def send_message(
+        self, chat_id: int, text: str, reply_markup=None, parse_mode=None
+    ) -> SendMessageResponse:
         """
         Sends a message to a specified chat
 
@@ -49,15 +48,15 @@ class TgClient:
         Return:
             SendMessageResponse: A response object containing information about the message
         """
-        url: str = self.get_url('sendMessage')
+        url: str = self.get_url("sendMessage")
         response: Response = requests.get(
             url=url,
             params={
-                'chat_id': chat_id,
-                'text': text,
-                'reply_markup': reply_markup,
-                'parse_mode': parse_mode
-            }
+                "chat_id": chat_id,
+                "text": text,
+                "reply_markup": reply_markup,
+                "parse_mode": parse_mode,
+            },
         )
         data = response.json()
         return SendMessageResponseSchema().load(data)

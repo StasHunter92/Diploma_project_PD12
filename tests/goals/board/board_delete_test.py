@@ -38,7 +38,7 @@ class TestBoardDestroyView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('board', kwargs={'pk': board.id})
+        url: str = reverse("board", kwargs={"pk": board.id})
 
         response: Response = authenticated_user.delete(url)
 
@@ -46,10 +46,10 @@ class TestBoardDestroyView:
         category.refresh_from_db()
         goal.refresh_from_db()
 
-        assert response.status_code == status.HTTP_204_NO_CONTENT, 'Доска не удалилась'
-        assert board.is_deleted, 'Статус доски не поменялся'
-        assert category.is_deleted, 'Статус категории не поменялся'
-        assert goal.status == Goal.Status.archived, 'Статус цели не поменялся'
+        assert response.status_code == status.HTTP_204_NO_CONTENT, "Доска не удалилась"
+        assert board.is_deleted, "Статус доски не поменялся"
+        assert category.is_deleted, "Статус категории не поменялся"
+        assert goal.status == Goal.Status.archived, "Статус цели не поменялся"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -78,8 +78,10 @@ class TestBoardDestroyView:
         board = BoardFactory()
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
-        BoardParticipantFactory(board=board, user=user, role=BoardParticipant.Role.moderator)
-        url: str = reverse('board', kwargs={'pk': board.id})
+        BoardParticipantFactory(
+            board=board, user=user, role=BoardParticipant.Role.moderator
+        )
+        url: str = reverse("board", kwargs={"pk": board.id})
 
         response: Response = authenticated_user.delete(url)
 
@@ -87,10 +89,12 @@ class TestBoardDestroyView:
         category.refresh_from_db()
         goal.refresh_from_db()
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
-        assert not board.is_deleted, 'Статус доски поменялся'
-        assert not category.is_deleted, 'Статус категории поменялся'
-        assert not goal.status == Goal.Status.archived, 'Статус цели поменялся'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"
+        assert not board.is_deleted, "Статус доски поменялся"
+        assert not category.is_deleted, "Статус категории поменялся"
+        assert not goal.status == Goal.Status.archived, "Статус цели поменялся"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -113,8 +117,8 @@ class TestBoardDestroyView:
         """
         board = BoardFactory()
         BoardParticipantFactory(board=board)
-        url: str = reverse('board', kwargs={'pk': board.id})
+        url: str = reverse("board", kwargs={"pk": board.id})
 
         response: Response = authenticated_user.delete(url)
 
-        assert response.status_code == status.HTTP_404_NOT_FOUND, 'Запрос дал результат'
+        assert response.status_code == status.HTTP_404_NOT_FOUND, "Запрос дал результат"

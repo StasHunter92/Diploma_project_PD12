@@ -6,35 +6,44 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('bot', '0002_rename_user_id_telegramuser_user'),
+        ("bot", "0002_rename_user_id_telegramuser_user"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='telegramuser',
-            options={'verbose_name': 'Telegram аккаунт', 'verbose_name_plural': 'Telegram аккаунты'},
+            name="telegramuser",
+            options={
+                "verbose_name": "Telegram аккаунт",
+                "verbose_name_plural": "Telegram аккаунты",
+            },
         ),
         migrations.RemoveField(
-            model_name='telegramuser',
-            name='tg_user_id',
+            model_name="telegramuser",
+            name="tg_user_id",
         ),
         migrations.AddField(
-            model_name='telegramuser',
-            name='tg_username',
-            field=models.CharField(default='default', max_length=50, verbose_name='Никнейм пользователя'),
+            model_name="telegramuser",
+            name="tg_username",
+            field=models.CharField(
+                default="default", max_length=50, verbose_name="Никнейм пользователя"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='telegramuser',
-            name='tg_chat_id',
-            field=models.PositiveBigIntegerField(unique=True, verbose_name='ID чата'),
+            model_name="telegramuser",
+            name="tg_chat_id",
+            field=models.PositiveBigIntegerField(unique=True, verbose_name="ID чата"),
         ),
         migrations.AlterField(
-            model_name='telegramuser',
-            name='user',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            model_name="telegramuser",
+            name="user",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Пользователь",
+            ),
         ),
     ]

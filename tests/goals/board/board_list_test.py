@@ -13,7 +13,8 @@ from tests.factories import BoardFactory, BoardParticipantFactory
 # Create tests
 class TestBoardListView:
     """Tests for Board list view"""
-    url: str = reverse('board_list')
+
+    url: str = reverse("board_list")
 
     @pytest.mark.django_db
     def test_active_board_list_participant(self, authenticated_user, user) -> None:
@@ -43,8 +44,8 @@ class TestBoardListView:
         expected_response: Dict = BoardCreateSerializer(active_boards, many=True).data
         response: Response = authenticated_user.get(self.url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data == expected_response, 'Списки досок не совпадают'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert response.data == expected_response, "Списки досок не совпадают"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -72,11 +73,13 @@ class TestBoardListView:
         for board in deleted_boards:
             BoardParticipantFactory(board=board, user=user)
 
-        unexpected_response: Dict = BoardCreateSerializer(deleted_boards, many=True).data
+        unexpected_response: Dict = BoardCreateSerializer(
+            deleted_boards, many=True
+        ).data
         response: Response = authenticated_user.get(self.url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert not response.data == unexpected_response, 'Получены удаленные доски'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert not response.data == unexpected_response, "Получены удаленные доски"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -106,8 +109,8 @@ class TestBoardListView:
         unexpected_response: Dict = BoardCreateSerializer(boards, many=True).data
         response: Response = authenticated_user.get(self.url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert not response.data == unexpected_response, 'Получены чужие доски'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert not response.data == unexpected_response, "Получены чужие доски"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -129,4 +132,6 @@ class TestBoardListView:
         """
         response: Response = api_client.get(self.url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

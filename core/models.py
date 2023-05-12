@@ -8,5 +8,6 @@ class User(AbstractUser):
 
     class Meta:
         """Meta information for user model"""
-        verbose_name: str = 'Пользователь'
-        verbose_name_plural: str = 'Пользователи'
+
+        verbose_name: str = "Пользователь"
+        verbose_name_plural: str = "Пользователи"

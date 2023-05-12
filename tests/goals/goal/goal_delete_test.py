@@ -40,14 +40,14 @@ class TestGoalDestroyView:
         goal = GoalFactory(category=category)
         GoalCommentFactory.create_batch(size=5, goal=goal)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('goal', kwargs={'pk': goal.id})
+        url: str = reverse("goal", kwargs={"pk": goal.id})
 
         response: Response = authenticated_user.delete(url)
         goal.refresh_from_db()
 
-        assert response.status_code == status.HTTP_204_NO_CONTENT, 'Цель не удалена'
-        assert goal.status == Goal.Status.archived, 'Статус цели не обновился'
-        assert not goal.comments.exists(), 'Комментарии не удалились'
+        assert response.status_code == status.HTTP_204_NO_CONTENT, "Цель не удалена"
+        assert goal.status == Goal.Status.archived, "Статус цели не обновился"
+        assert not goal.comments.exists(), "Комментарии не удалились"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -75,14 +75,14 @@ class TestGoalDestroyView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
         BoardParticipantFactory(
-            board=board,
-            user=user,
-            role=BoardParticipant.Role.viewer
+            board=board, user=user, role=BoardParticipant.Role.viewer
         )
-        url: str = reverse('goal', kwargs={'pk': goal.id})
+        url: str = reverse("goal", kwargs={"pk": goal.id})
 
         response: Response = authenticated_user.delete(url)
         goal.refresh_from_db()
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
-        assert not goal.status == Goal.Status.archived, 'Статус цели обновился'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"
+        assert not goal.status == Goal.Status.archived, "Статус цели обновился"

@@ -4,15 +4,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('bot', '0003_alter_telegramuser_options_and_more'),
+        ("bot", "0003_alter_telegramuser_options_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='telegramuser',
-            name='tg_username',
-            field=models.CharField(max_length=50, null=True, verbose_name='Никнейм пользователя'),
+            model_name="telegramuser",
+            name="tg_username",
+            field=models.CharField(
+                max_length=50, null=True, verbose_name="Никнейм пользователя"
+            ),
         ),
     ]

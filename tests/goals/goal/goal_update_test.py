@@ -40,22 +40,23 @@ class TestGoalUpdateView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('goal', kwargs={'pk': goal.id})
+        url: str = reverse("goal", kwargs={"pk": goal.id})
 
         update_data: Dict[str, str] = {
-            'title': 'New goal title',
-            'category': category.id
+            "title": "New goal title",
+            "category": category.id,
         }
 
         response: Response = authenticated_user.put(url, data=update_data)
         updated_goal = Goal.objects.filter(
-            title=update_data['title'],
-            category=category
+            title=update_data["title"], category=category
         ).exists()
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data['title'] == update_data['title'], 'Обновленные данные не совпадают'
-        assert updated_goal, 'Цель не обновлена'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert (
+            response.data["title"] == update_data["title"]
+        ), "Обновленные данные не совпадают"
+        assert updated_goal, "Цель не обновлена"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -83,22 +84,21 @@ class TestGoalUpdateView:
         category = GoalCategoryFactory(board=board)
         goal = GoalFactory(category=category)
         BoardParticipantFactory(
-            board=board,
-            user=user,
-            role=BoardParticipant.Role.viewer
+            board=board, user=user, role=BoardParticipant.Role.viewer
         )
-        url: str = reverse('goal', kwargs={'pk': goal.id})
+        url: str = reverse("goal", kwargs={"pk": goal.id})
 
         update_data: Dict[str, str] = {
-            'title': 'New goal title',
-            'category': category.id
+            "title": "New goal title",
+            "category": category.id,
         }
 
         response: Response = authenticated_user.put(url, data=update_data)
         unexpected_goal = Goal.objects.filter(
-            title=update_data['title'],
-            category=category
+            title=update_data["title"], category=category
         ).exists()
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
-        assert not unexpected_goal, 'Цель обновлена'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"
+        assert not unexpected_goal, "Цель обновлена"

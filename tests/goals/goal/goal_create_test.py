@@ -14,10 +14,13 @@ from tests.factories import BoardFactory, BoardParticipantFactory, GoalCategoryF
 # Create tests
 class TestGoalCreateView:
     """Tests for Goal create view"""
-    url: str = reverse('goal_create')
+
+    url: str = reverse("goal_create")
 
     @pytest.mark.django_db
-    def test_goal_create_owner_moderator(self, authenticated_user, user, due_date) -> None:
+    def test_goal_create_owner_moderator(
+        self, authenticated_user, user, due_date
+    ) -> None:
         """
         Test to check if a new goal can be created successfully,
         when the user is owner or moderator of the board
@@ -42,20 +45,18 @@ class TestGoalCreateView:
         BoardParticipantFactory(board=board, user=user)
 
         create_data: Dict[str, Union[str, int]] = {
-            'category': category.pk,
-            'title': 'New goal',
-            'due_date': due_date
+            "category": category.pk,
+            "title": "New goal",
+            "due_date": due_date,
         }
 
         response: Response = authenticated_user.post(self.url, data=create_data)
         created_goal = Goal.objects.filter(
-            user=user,
-            category=category,
-            title=create_data['title']
+            user=user, category=category, title=create_data["title"]
         ).exists()
 
-        assert response.status_code == status.HTTP_201_CREATED, 'Цель не создалась'
-        assert created_goal, 'Созданной цели не существует'
+        assert response.status_code == status.HTTP_201_CREATED, "Цель не создалась"
+        assert created_goal, "Созданной цели не существует"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -82,31 +83,33 @@ class TestGoalCreateView:
         board = BoardFactory()
         category = GoalCategoryFactory(board=board)
         BoardParticipantFactory(
-            board=board,
-            user=user,
-            role=BoardParticipant.Role.viewer
+            board=board, user=user, role=BoardParticipant.Role.viewer
         )
 
         create_data: Dict[str, Union[str, int]] = {
-            'category': category.pk,
-            'title': 'New goal',
-            'due_date': due_date
+            "category": category.pk,
+            "title": "New goal",
+            "due_date": due_date,
         }
 
         response: Response = authenticated_user.post(self.url, data=create_data)
         unexpected_goal = Goal.objects.filter(
-            user=user,
-            category=category,
-            title=create_data['title']
+            user=user, category=category, title=create_data["title"]
         ).exists()
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST, 'Отказ в доступе не предоставлен'
-        assert response.data['category'][0] == 'Вы не можете создавать цели', 'Вы можете создать цель'
-        assert not unexpected_goal, 'Цель создана'
+        assert (
+            response.status_code == status.HTTP_400_BAD_REQUEST
+        ), "Отказ в доступе не предоставлен"
+        assert (
+            response.data["category"][0] == "Вы не можете создавать цели"
+        ), "Вы можете создать цель"
+        assert not unexpected_goal, "Цель создана"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
-    def test_goal_create_deleted_category(self, authenticated_user, user, due_date) -> None:
+    def test_goal_create_deleted_category(
+        self, authenticated_user, user, due_date
+    ) -> None:
         """
         Test to check if a new goal cannot be created in the deleted category
 
@@ -130,21 +133,23 @@ class TestGoalCreateView:
         BoardParticipantFactory(board=board, user=user)
 
         create_data: Dict[str, Union[str, int]] = {
-            'category': category.pk,
-            'title': 'New goal',
-            'due_date': due_date
+            "category": category.pk,
+            "title": "New goal",
+            "due_date": due_date,
         }
 
         response: Response = authenticated_user.post(self.url, data=create_data)
         unexpected_goal = Goal.objects.filter(
-            user=user,
-            category=category,
-            title=create_data['title']
+            user=user, category=category, title=create_data["title"]
         ).exists()
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST, 'Отказ в доступе не предоставлен'
-        assert response.data['category'][0] == 'Категория удалена', 'Вы можете создать цель'
-        assert not unexpected_goal, 'Цель создана'
+        assert (
+            response.status_code == status.HTTP_400_BAD_REQUEST
+        ), "Отказ в доступе не предоставлен"
+        assert (
+            response.data["category"][0] == "Категория удалена"
+        ), "Вы можете создать цель"
+        assert not unexpected_goal, "Цель создана"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -166,4 +171,6 @@ class TestGoalCreateView:
         """
         response: Response = api_client.post(self.url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

@@ -39,13 +39,13 @@ class TestCommentRetrieveView:
         goal = GoalFactory(category=category)
         comment = GoalCommentFactory(goal=goal)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('comment', kwargs={'pk': comment.id})
+        url: str = reverse("comment", kwargs={"pk": comment.id})
 
         expected_response: Dict = GoalCommentSerializer(comment).data
         response: Response = authenticated_user.get(url)
 
-        assert response.status_code == status.HTTP_200_OK, 'Запрос не прошел'
-        assert response.data == expected_response, 'Неправильный комментарий'
+        assert response.status_code == status.HTTP_200_OK, "Запрос не прошел"
+        assert response.data == expected_response, "Неправильный комментарий"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -72,13 +72,13 @@ class TestCommentRetrieveView:
         goal = GoalFactory(category=category)
         comment = GoalCommentFactory(goal=goal)
         BoardParticipantFactory(board=board)
-        url: str = reverse('comment', kwargs={'pk': comment.id})
+        url: str = reverse("comment", kwargs={"pk": comment.id})
 
         unexpected_response: Dict = GoalCommentSerializer(comment).data
         response: Response = authenticated_user.get(url)
 
-        assert response.status_code == status.HTTP_404_NOT_FOUND, 'Запрос дал результат'
-        assert not response.data == unexpected_response, 'Получен чужой комментарий'
+        assert response.status_code == status.HTTP_404_NOT_FOUND, "Запрос дал результат"
+        assert not response.data == unexpected_response, "Получен чужой комментарий"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -99,8 +99,10 @@ class TestCommentRetrieveView:
         Raises:
             AssertionError
         """
-        url: str = reverse('comment', kwargs={'pk': 1})
+        url: str = reverse("comment", kwargs={"pk": 1})
 
         response: Response = api_client.get(url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

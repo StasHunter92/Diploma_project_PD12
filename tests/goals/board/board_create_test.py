@@ -12,7 +12,8 @@ from goals.models.board import Board, BoardParticipant
 # Create tests
 class TestBoardCreateView:
     """Tests for Board create view"""
-    url: str = reverse('board_create')
+
+    url: str = reverse("board_create")
 
     @pytest.mark.django_db
     def test_board_create(self, authenticated_user, user) -> None:
@@ -35,24 +36,18 @@ class TestBoardCreateView:
         Raises:
             AssertionError
         """
-        create_data: Dict[str, str] = {
-            'title': 'New board'
-        }
+        create_data: Dict[str, str] = {"title": "New board"}
 
         response: Response = authenticated_user.post(self.url, data=create_data)
 
-        created_board = Board.objects.filter(
-            title=create_data['title']
-        ).exists()
+        created_board = Board.objects.filter(title=create_data["title"]).exists()
         created_board_participant = BoardParticipant.objects.filter(
-            board=created_board,
-            user=user,
-            role=BoardParticipant.Role.owner
+            board=created_board, user=user, role=BoardParticipant.Role.owner
         ).exists()
 
-        assert response.status_code == status.HTTP_201_CREATED, 'Доска не создалась'
-        assert created_board, 'Созданной доски не существует'
-        assert created_board_participant, 'Созданного участника не существует'
+        assert response.status_code == status.HTTP_201_CREATED, "Доска не создалась"
+        assert created_board, "Созданной доски не существует"
+        assert created_board_participant, "Созданного участника не существует"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -74,4 +69,6 @@ class TestBoardCreateView:
         """
         response: Response = api_client.post(self.url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"

@@ -38,12 +38,14 @@ class TestCommentDestroyView:
         goal = GoalFactory(category=category)
         comment = GoalCommentFactory(goal=goal)
         BoardParticipantFactory(board=board, user=user)
-        url: str = reverse('comment', kwargs={'pk': comment.id})
+        url: str = reverse("comment", kwargs={"pk": comment.id})
 
         response: Response = authenticated_user.delete(url)
 
-        assert response.status_code == status.HTTP_204_NO_CONTENT, 'Комментарий не удален'
-        assert not goal.comments.exists(), 'Комментарий существует'
+        assert (
+            response.status_code == status.HTTP_204_NO_CONTENT
+        ), "Комментарий не удален"
+        assert not goal.comments.exists(), "Комментарий существует"
 
     # ----------------------------------------------------------------
     @pytest.mark.django_db
@@ -72,13 +74,13 @@ class TestCommentDestroyView:
         goal = GoalFactory(category=category)
         comment = GoalCommentFactory(goal=goal)
         BoardParticipantFactory(
-            board=board,
-            user=user,
-            role=BoardParticipant.Role.viewer
+            board=board, user=user, role=BoardParticipant.Role.viewer
         )
-        url: str = reverse('comment', kwargs={'pk': comment.id})
+        url: str = reverse("comment", kwargs={"pk": comment.id})
 
         response: Response = authenticated_user.delete(url)
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN, 'Отказ в доступе не предоставлен'
-        assert goal.comments.exists(), 'Комментарий удалился'
+        assert (
+            response.status_code == status.HTTP_403_FORBIDDEN
+        ), "Отказ в доступе не предоставлен"
+        assert goal.comments.exists(), "Комментарий удалился"

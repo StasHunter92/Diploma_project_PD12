@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,17 +14,43 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='TelegramUser',
+            name="TelegramUser",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('tg_chat_id', models.PositiveBigIntegerField(verbose_name='id чата')),
-                ('tg_user_id', models.PositiveBigIntegerField(unique=True, verbose_name='id пользователя')),
-                ('verification_code', models.CharField(max_length=6, null=True, verbose_name='Код авторизации')),
-                ('user_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("tg_chat_id", models.PositiveBigIntegerField(verbose_name="id чата")),
+                (
+                    "tg_user_id",
+                    models.PositiveBigIntegerField(
+                        unique=True, verbose_name="id пользователя"
+                    ),
+                ),
+                (
+                    "verification_code",
+                    models.CharField(
+                        max_length=6, null=True, verbose_name="Код авторизации"
+                    ),
+                ),
+                (
+                    "user_id",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Автор",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Бот аккаунт',
-                'verbose_name_plural': 'Бот аккаунты',
+                "verbose_name": "Бот аккаунт",
+                "verbose_name_plural": "Бот аккаунты",
             },
         ),
     ]

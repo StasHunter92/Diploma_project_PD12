@@ -22,18 +22,19 @@ class UserFactory(factory.django.DjangoModelFactory):
     Returns:
         User instance with randomized data
     """
-    username = factory.Faker('user_name')
-    password = factory.Faker('password')
-    email = factory.Faker('email')
-    first_name = factory.Faker('first_name')
-    last_name = factory.Faker('last_name')
+
+    username = factory.Faker("user_name")
+    password = factory.Faker("password")
+    email = factory.Faker("email")
+    first_name = factory.Faker("first_name")
+    last_name = factory.Faker("last_name")
 
     class Meta:
         model = User
 
     @classmethod
     def create(cls, **kwargs):
-        custom_password = kwargs.pop('password', None)
+        custom_password = kwargs.pop("password", None)
         user = super().create(**kwargs)
         if custom_password:
             user.set_password(custom_password)
@@ -52,7 +53,8 @@ class BoardFactory(factory.django.DjangoModelFactory):
     Returns:
         Board instance with randomized data
     """
-    title = factory.Faker('sentence', nb_words=2)
+
+    title = factory.Faker("sentence", nb_words=2)
 
     class Meta:
         model = Board
@@ -66,9 +68,10 @@ class GoalCategoryFactory(factory.django.DjangoModelFactory):
     Returns:
         Category instance with randomized data
     """
+
     board = factory.SubFactory(BoardFactory)
     user = factory.SubFactory(UserFactory)
-    title = factory.Faker('sentence', nb_words=2)
+    title = factory.Faker("sentence", nb_words=2)
 
     class Meta:
         model = GoalCategory
@@ -82,11 +85,12 @@ class GoalFactory(factory.django.DjangoModelFactory):
     Returns:
         Goal instance with randomized data
     """
+
     user = factory.SubFactory(UserFactory)
     category = factory.SubFactory(GoalCategoryFactory)
-    title = factory.Faker('sentence', nb_words=2)
-    description = factory.Faker('sentence', nb_words=10)
-    due_date = (datetime.date.today() + datetime.timedelta(days=7)).strftime('%Y-%m-%d')
+    title = factory.Faker("sentence", nb_words=2)
+    description = factory.Faker("sentence", nb_words=10)
+    due_date = (datetime.date.today() + datetime.timedelta(days=7)).strftime("%Y-%m-%d")
 
     class Meta:
         model = Goal
@@ -100,9 +104,10 @@ class GoalCommentFactory(factory.django.DjangoModelFactory):
     Returns:
         Comment instance with randomized data
     """
+
     goal = factory.SubFactory(GoalFactory)
     user = factory.SubFactory(UserFactory)
-    text = factory.Faker('sentence', nb_words=10)
+    text = factory.Faker("sentence", nb_words=10)
 
     class Meta:
         model = GoalComment
@@ -116,6 +121,7 @@ class BoardParticipantFactory(factory.django.DjangoModelFactory):
     Returns:
         Participant instance with randomized data
     """
+
     board = factory.SubFactory(BoardFactory)
     user = factory.SubFactory(UserFactory)
 

@@ -7,7 +7,7 @@ from core.serializers import (
     UserSignupSerializer,
     UserLoginSerializer,
     UserRetrieveUpdateSerializer,
-    UserPasswordUpdateSerializer
+    UserPasswordUpdateSerializer,
 )
 from tests.factories import UserFactory
 
@@ -39,30 +39,30 @@ def test_user_signup_serializer(new_user) -> None:
     """
     # Test creating a new user with valid data
     valid_data: Dict[str, str] = {
-        'username': new_user.username,
-        'password': new_user.password,
-        'password_repeat': new_user.password,
+        "username": new_user.username,
+        "password": new_user.password,
+        "password_repeat": new_user.password,
     }
 
     serializer = UserSignupSerializer(data=valid_data)
 
-    assert serializer.is_valid(), 'Пароли должны совпадать'
+    assert serializer.is_valid(), "Пароли должны совпадать"
     created_user = serializer.save()
 
-    assert created_user.username == valid_data['username'], 'Username не совпадают'
-    assert created_user.check_password(valid_data['password']), 'Пароли не совпадают'
+    assert created_user.username == valid_data["username"], "Username не совпадают"
+    assert created_user.check_password(valid_data["password"]), "Пароли не совпадают"
 
     # Test creating a new user with invalid data
     invalid_data: Dict[str, str] = {
-        'username': 'test_user_2',
-        'password': 'test_password_2',
-        'password_repeat': 'wrong_password',
+        "username": "test_user_2",
+        "password": "test_password_2",
+        "password_repeat": "wrong_password",
     }
 
     serializer = UserSignupSerializer(data=invalid_data)
 
-    assert not serializer.is_valid(), 'Повторный пароль не должен совпадать'
-    assert serializer.errors['non_field_errors'][0] == 'Пароли должны совпадать'
+    assert not serializer.is_valid(), "Повторный пароль не должен совпадать"
+    assert serializer.errors["non_field_errors"][0] == "Пароли должны совпадать"
 
 
 # ----------------------------------------------------------------
@@ -82,22 +82,22 @@ def test_user_login_serializer(user) -> None:
     """
     # Test login a user with valid data
     valid_data: Dict[str, str] = {
-        'username': user.username,
-        'password': 'testp@ssword',
+        "username": user.username,
+        "password": "testp@ssword",
     }
 
     serializer = UserLoginSerializer(data=valid_data)
-    assert serializer.is_valid(), 'Ошибка в username'
+    assert serializer.is_valid(), "Ошибка в username"
 
     # Test login a user with invalid data
     invalid_data: Dict[str, str] = {
-        'username': 'test_user_2',
-        'password': 'test_password_2',
+        "username": "test_user_2",
+        "password": "test_password_2",
     }
 
     serializer = UserLoginSerializer(data=invalid_data)
-    assert not serializer.is_valid(), 'Введен существующий username'
-    assert serializer.errors['username'][0] == 'Указанного пользователя не существует'
+    assert not serializer.is_valid(), "Введен существующий username"
+    assert serializer.errors["username"][0] == "Указанного пользователя не существует"
 
 
 # ----------------------------------------------------------------
@@ -117,41 +117,31 @@ def test_user_retrieve_update_serializer(user, rf) -> None:
         AssertionError
     """
     # Test user can update data
-    request = rf.patch('/')
+    request = rf.patch("/")
     request.user = user
 
-    valid_data: Dict[str, str] = {
-        'username': 'updated_user'
-    }
+    valid_data: Dict[str, str] = {"username": "updated_user"}
 
     serializer = UserRetrieveUpdateSerializer(
-        instance=user,
-        data=valid_data,
-        partial=True,
-        context={'request': request}
+        instance=user, data=valid_data, partial=True, context={"request": request}
     )
 
-    assert serializer.is_valid(), 'Username совпал с существующим'
+    assert serializer.is_valid(), "Username совпал с существующим"
     updated_user = serializer.save()
-    assert updated_user.username == valid_data['username'], 'Username не совпадают'
+    assert updated_user.username == valid_data["username"], "Username не совпадают"
 
     # Test that second user has same username as updated user
-    request = rf.patch('/')
+    request = rf.patch("/")
     request.user = UserFactory()
 
-    invalid_data: Dict[str, str] = {
-        'username': 'updated_user'
-    }
+    invalid_data: Dict[str, str] = {"username": "updated_user"}
 
     serializer = UserRetrieveUpdateSerializer(
-        instance=user,
-        data=invalid_data,
-        partial=True,
-        context={'request': request}
+        instance=user, data=invalid_data, partial=True, context={"request": request}
     )
 
-    assert not serializer.is_valid(), 'Username не совпал с существующим'
-    assert serializer.errors['username'][0] == 'Введенное имя занято, попробуйте другое'
+    assert not serializer.is_valid(), "Username не совпал с существующим"
+    assert serializer.errors["username"][0] == "Введенное имя занято, попробуйте другое"
 
 
 # ----------------------------------------------------------------
@@ -172,51 +162,53 @@ def test_user_password_update_serializer(user, rf) -> None:
         AssertionError
     """
     # Test user passwords are correct
-    request = rf.put('/')
+    request = rf.put("/")
     request.user = user
 
     valid_data: Dict[str, str] = {
-        'old_password': 'testp@ssword',
-        'new_password': 'testp@ssword2',
+        "old_password": "testp@ssword",
+        "new_password": "testp@ssword2",
     }
 
     serializer = UserPasswordUpdateSerializer(
-        instance=user,
-        data=valid_data,
-        partial=True,
-        context={'request': request}
+        instance=user, data=valid_data, partial=True, context={"request": request}
     )
 
-    assert serializer.is_valid(), 'Старый пароль не подошел или новый пароль совпал со старым'
+    assert (
+        serializer.is_valid()
+    ), "Старый пароль не подошел или новый пароль совпал со старым"
 
     # Test user old password doesn't match current password
     old_password_test_data: Dict[str, str] = {
-        'old_password': 'not_testpassword',
-        'new_password': 'testp@ssword2',
+        "old_password": "not_testpassword",
+        "new_password": "testp@ssword2",
     }
 
     serializer = UserPasswordUpdateSerializer(
         instance=user,
         data=old_password_test_data,
         partial=False,
-        context={'request': request}
+        context={"request": request},
     )
 
-    assert not serializer.is_valid(), 'Старый пароль введен верно'
-    assert serializer.errors['old_password'][0] == 'Текущий пароль введен неверно'
+    assert not serializer.is_valid(), "Старый пароль введен верно"
+    assert serializer.errors["old_password"][0] == "Текущий пароль введен неверно"
 
     # Test user new password match current password
     new_password_test_data: Dict[str, str] = {
-        'old_password': 'testp@ssword',
-        'new_password': 'testp@ssword',
+        "old_password": "testp@ssword",
+        "new_password": "testp@ssword",
     }
 
     serializer = UserPasswordUpdateSerializer(
         instance=user,
         data=new_password_test_data,
         partial=False,
-        context={'request': request}
+        context={"request": request},
     )
 
-    assert not serializer.is_valid(), 'Новый пароль отличается от старого'
-    assert serializer.errors['new_password'][0] == 'Новый пароль должен отличаться от старого'
+    assert not serializer.is_valid(), "Новый пароль отличается от старого"
+    assert (
+        serializer.errors["new_password"][0]
+        == "Новый пароль должен отличаться от старого"
+    )

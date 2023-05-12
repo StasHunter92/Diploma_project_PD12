@@ -52,31 +52,36 @@ class Controller(object):
             None
         """
         verification_code: str = cls.create_verification_code()
-        username: str = message.from_.username if message.from_.username else 'Anonymous'
+        username: str = (
+            message.from_.username if message.from_.username else "Anonymous"
+        )
 
         TelegramUser.objects.create(
             tg_chat_id=message.chat.id,
             tg_username=username,
-            verification_code=verification_code
+            verification_code=verification_code,
         )
 
-        keyboard: list[list[str]] = [['/confirm']]
-        reply_markup: str = json.dumps(
-            {'keyboard': keyboard,
-             'resize_keyboard': True,
-             'one_time_keyboard': False,
-             'is_persistent': True}
-        )
+        keyboard: list[list[str]] = [["/confirm"]]
+        reply_markup: str = json.dumps({
+            "keyboard": keyboard,
+            "resize_keyboard": True,
+            "one_time_keyboard": False,
+            "is_persistent": True,
+        })
 
         client.send_message(
             chat_id=message.chat.id,
             text=f"Добро пожаловать, {message.from_.username}! \n"
-                 f"Ваш одноразовый код авторизации: {verification_code} \n",
-            reply_markup=reply_markup)
+            f"Ваш одноразовый код авторизации: {verification_code} \n",
+            reply_markup=reply_markup,
+        )
 
     # ----------------------------------------------------------------
     @classmethod
-    def create_verification_code(cls, length: int = 6, allowed_chars: str = RANDOM_STRING_CHARS) -> str:
+    def create_verification_code(
+        cls, length: int = 6, allowed_chars: str = RANDOM_STRING_CHARS
+    ) -> str:
         """
         Creates verification code
 
@@ -103,12 +108,12 @@ class Controller(object):
             None
         """
         user.verification_code = cls.create_verification_code()
-        user.save(update_fields=('verification_code',))
+        user.save(update_fields=("verification_code",))
 
         client.send_message(
             chat_id=user.tg_chat_id,
             text=f"Вы еще не подтвердили код в приложении \n"
-                 f"Ваш новый одноразовый код авторизации: {user.verification_code} \n",
+            f"Ваш новый одноразовый код авторизации: {user.verification_code} \n",
         )
 
     # ----------------------------------------------------------------
@@ -140,11 +145,15 @@ class Controller(object):
             QuerySet[Goal]: List of goals returned by the API
         """
         # Return a queryset of goals the user is a participant of
-        return Goal.objects.select_related('category').filter(
-            category__board__participants__user=user.user,
-            category__board__is_deleted=False,
-            category__is_deleted=False
-        ).exclude(status=Goal.Status.archived)
+        return (
+            Goal.objects.select_related("category")
+            .filter(
+                category__board__participants__user=user.user,
+                category__board__is_deleted=False,
+                category__is_deleted=False,
+            )
+            .exclude(status=Goal.Status.archived)
+        )
 
     # ----------------------------------------------------------------
     @classmethod
@@ -158,15 +167,18 @@ class Controller(object):
         Returns:
             QuerySet[GoalCategory]: List of categories returned by the API
         """
-        return GoalCategory.objects.select_related('board').filter(
+        return GoalCategory.objects.select_related("board").filter(
             board__participants__role__in=[1, 2],
             board__participants__user=user.user,
             board__is_deleted=False,
-            is_deleted=False)
+            is_deleted=False,
+        )
 
     # ----------------------------------------------------------------
     @classmethod
-    def get_category(cls, user: TelegramUser, message: Message) -> Optional[GoalCategory]:
+    def get_category(
+        cls, user: TelegramUser, message: Message
+    ) -> Optional[GoalCategory]:
         """
         Get category from the database
 
@@ -177,17 +189,23 @@ class Controller(object):
         Returns:
             Optional[GoalCategory]: A single category object returned by the API
         """
-        return GoalCategory.objects.select_related('board').filter(
-            board__participants__role__in=[1, 2],
-            title=message.text,
-            board__participants__user=user.user,
-            board__is_deleted=False,
-            is_deleted=False,
-        ).first()
+        return (
+            GoalCategory.objects.select_related("board")
+            .filter(
+                board__participants__role__in=[1, 2],
+                title=message.text,
+                board__participants__user=user.user,
+                board__is_deleted=False,
+                is_deleted=False,
+            )
+            .first()
+        )
 
     # ----------------------------------------------------------------
     @classmethod
-    def create_goal(cls, user: TelegramUser, message: Message, category: GoalCategory, days: int) -> Goal:
+    def create_goal(
+        cls, user: TelegramUser, message: Message, category: GoalCategory, days: int
+    ) -> Goal:
         """
         Creates a new goal
 
@@ -205,5 +223,5 @@ class Controller(object):
             user=user.user,
             category=category,
             title=message.text,
-            due_date=due_date.strftime('%Y-%m-%d')
+            due_date=due_date.strftime("%Y-%m-%d"),
         )  # type: ignore
