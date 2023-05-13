@@ -9,6 +9,7 @@ from bot.management.bot_controller import Controller
 from bot.tg.client import TgClient
 from bot.tg.dc import Message, GetUpdatesResponse
 from bot.models import TelegramUser
+from diploma_project_pd12.settings import env
 from goals.models.goal import Goal
 from goals.models.goal_category import GoalCategory
 
@@ -33,6 +34,7 @@ class BotMachine(object):
         bot: The 'Machine' instance that represents the bots state transitions
         controller: The controller of the bot with functional logic
         days: Delta for the due date of the goal
+        host: The application host for generating external links
     """
 
     def __init__(self, client: TgClient):
@@ -58,7 +60,7 @@ class BotMachine(object):
         )
         self.controller = Controller()
         self.days = 7
-
+        self.host = env("APP_HOST")
         # Add verification block transitions
         self.bot.add_transition(
             "go_to_verification",
@@ -170,9 +172,9 @@ class BotMachine(object):
                             self.client.send_message(
                                 chat_id=message.chat.id,  # type: ignore
                                 text=f"Поздравляю, {message.from_.username}! "  # type: ignore
-                                f"Вы подключили бота к приложению, "
-                                f"теперь Вам доступны команды для получения или создания целей. \n"
-                                f"Выберите одну из доступных команд:",
+                                     f"Вы подключили бота к приложению, "
+                                     f"теперь Вам доступны команды для получения или создания целей. \n"
+                                     f"Выберите одну из доступных команд:",
                                 reply_markup=reply_markup,
                             )  # type: ignore
                             self.go_to_main()  # type: ignore
@@ -248,11 +250,11 @@ class BotMachine(object):
                         for goal in goals:
                             self.client.send_message(
                                 chat_id=message.chat.id,
-                                text=f"Ваша цель: <a href='http://just-for.site/boards/{goal.category.board.id}"
-                                f"/categories/{goal.category.id}/goals?goal={goal.id}'><b>{goal.title}</b></a> \n"
-                                f"Категория: {goal.category} \n"
-                                f"Доска: {goal.category.board} \n"
-                                f"Подробности: {goal.description if goal.description != '' else 'Нет описания'}",
+                                text=f"Ваша цель: <a href='http://{self.host}/boards/{goal.category.board.id}"
+                                     f"/categories/{goal.category.id}/goals?goal={goal.id}'><b>{goal.title}</b></a> \n"
+                                     f"Категория: {goal.category} \n"
+                                     f"Доска: {goal.category.board} \n"
+                                     f"Подробности: {goal.description if goal.description != '' else 'Нет описания'}",
                                 parse_mode="HTML",
                             )
                         logger.debug("- Get goals -")
@@ -327,7 +329,7 @@ class BotMachine(object):
                         self.client.send_message(
                             chat_id=message.chat.id,
                             text=f"Создание цели отменено \n"
-                            f"Выберите одну из доступных команд:",
+                                 f"Выберите одну из доступных команд:",
                             reply_markup=reply_markup,
                         )
                         logger.debug("- Cancelled -")
@@ -356,7 +358,7 @@ class BotMachine(object):
                         self.client.send_message(
                             chat_id=message.chat.id,
                             text=f"Категории <b>{message.text}</b> не существует \n"
-                            f"или у Вас нет прав для редактирования",
+                                 f"или у Вас нет прав для редактирования",
                             parse_mode="HTML",
                         )
 
@@ -413,7 +415,7 @@ class BotMachine(object):
                         self.client.send_message(
                             chat_id=message.chat.id,
                             text=f"Создание цели отменено \n"
-                            f"Выберите одну из доступных команд:",
+                                 f"Выберите одну из доступных команд:",
                             reply_markup=reply_markup,
                         )
                         logger.debug("- Cancelled -")
@@ -434,10 +436,10 @@ class BotMachine(object):
                     self.client.send_message(
                         chat_id=message.chat.id,
                         text=f"Ваша цель <a href='http://just-for.site/boards/{goal.category.board.id}"
-                        f"/categories/{goal.category.id}/goals?goal={goal.id}'><b>{goal.title}</b></a> "
-                        f"успешно создана! \n"
-                        f"Вы можете посмотреть ее в приложении, перейдя по ссылке \n\n"
-                        f"Выберите одну из доступных команд:",
+                             f"/categories/{goal.category.id}/goals?goal={goal.id}'><b>{goal.title}</b></a> "
+                             f"успешно создана! \n"
+                             f"Вы можете посмотреть ее в приложении, перейдя по ссылке \n\n"
+                             f"Выберите одну из доступных команд:",
                         reply_markup=reply_markup,
                         parse_mode="HTML",
                     )
