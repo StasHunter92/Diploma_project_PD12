@@ -60,7 +60,8 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       VK_OAUTH2_KEY: ${{ secrets.VK_OAUTH2_KEY }}
       VK_OAUTH2_SECRET: ${{ secrets.VK_OAUTH2_SECRET }}
-      TG_TOKEN: ${{ secrets.TG_TOKEN}}
+      TG_TOKEN: ${{ secrets.TG_TOKEN }}
+      APP_HOST: ${{ secrets.HOST }}
     steps:
       - name: Clone code
         uses: actions/checkout@v2
