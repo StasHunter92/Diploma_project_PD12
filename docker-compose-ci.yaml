@@ -14,7 +14,7 @@ services:
       timeout: 2s
       retries: 3
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
   tests:
     image: stashunter/todolist:${GITHUB_REF_NAME}-${GITHUB_RUN_ID}
@@ -82,4 +82,5 @@ services:
       - .env:/todolist/.env
 
 volumes:
+  postgres_data:
   django_static:
